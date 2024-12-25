@@ -1,0 +1,37 @@
+.img {
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(50%);
+}
+
+.content {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  height: 100%;
+  color: #fff;
+  /* backdrop-filter: blur(16px); */
+  backdrop-filter: brightness(40%);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.card {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(https://lh3.googleusercontent.com/p/AF1QipMwAGnEgWNMM6SjldwlI5k4lQbYIfZhrGoXx8zb=s680-w680-h510);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 8px;
+  padding: 0px;
+  background-position: center;
+}
+
+.table-container {
+  max-width: 100%;
+  overflow-x: auto;
+}

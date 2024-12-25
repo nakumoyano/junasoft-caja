@@ -1,0 +1,91 @@
+<div
+  class="h-full max-w-[50vh] w-[50vh] flex flex-col gap-y-4 rounded-lg lg:block md:hidden sm:hidden fixed print:hidden"
+>
+  <div class="flex flex-col rounded-lg bg-white drop-shadow">
+    <div
+      class="w-full bg-blue-600 p-2 rounded-t-lg text-white flex justify-between items-center"
+    >
+      <p class="font-medium">Mi perfil</p>
+
+      <a routerLink="/admin/configuracion">
+        <i
+          class="fa-solid fa-user-pen hover:cursor-pointer p-2 hover:bg-slate-100/20 rounded"
+        ></i>
+      </a>
+    </div>
+    <div class="flex flex-col">
+      <div class="flex p-2 gap-x-2">
+        <img
+          src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+          class="w-20 h-20 rounded-full object-cover"
+          alt=""
+        />
+
+        <div class="flex flex-col" *ngIf="user">
+          <p class="font-bold text-base">{{ user.resultado.nombreCompleto }}</p>
+          <small class="text-xs">{{ user.resultado.email }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="flex flex-col rounded-lg bg-white my-4 drop-shadow">
+    <div
+      class="w-full bg-[#B90101] p-2 rounded-t-lg text-white flex justify-between items-center"
+    >
+      <p class="font-medium">
+        Citas para Hoy (1)
+      </p>
+      <a routerLink="/admin/turnos/listado-de-turnos">
+        <button>
+          <i
+            class="fa-solid fa-calendar-day p-2 hover:bg-slate-100/20 rounded"
+          ></i>
+        </button>
+      </a>
+    </div>
+    <div class="flex flex-col">
+      <ul class="list-disc list-inside flex flex-col">
+        <div
+          class="flex items-center justify-between p-2 font-bold bg-slate-200/80 text-sm"
+        >
+          <p>PERSONA</p>
+          <p>INMUEBLE</p>
+          <p>HORA</p>
+        </div>
+        <hr />
+        <li class="cursor-pointer flex flex-col hover:bg-slate-100">
+          <div class="justify-between items-center flex text-xs p-2">
+            <strong class="uppercase">juan cruz breppe</strong>
+            Uruguay 1450
+            <strong>17:30hs</strong>
+          </div>
+          <hr />
+        </li>
+        <div class="flex justify-center w-full">
+          <a href="/admin/turnos/listado-de-turnos-de-hoy" class="w-full">
+            <button
+              class="text-[#B90101] hover:bg-blue-100 w-full font-bold text-xs py-2 px-4 rounded-b-lg"
+            >
+              Ver más
+            </button>
+          </a>
+        </div>
+      </ul>
+    </div>
+  </div> -->
+
+  <!-- S****************************** MENSAJE DE WARNING ************************ -->
+
+  <!-- <div
+    class="flex flex-col rounded-lg bg-yellow-100/80 my-4 drop-shadow gap-4 p-4 border-l-4 border-yellow-600"
+  >
+    <p class="font-bold text-yellow-600">
+      <i class="fa-solid fa-triangle-exclamation mr-2"></i>ATENCIÓN
+    </p>
+    <p class="text-yellow-500">
+      Seguimos trabajando en
+      <span class="uppercase font-bold">EDITAR INTERNACIÓN </span> (por el tema
+      de los archivos adjuntos).
+    </p>
+  </div> -->
+</div>
