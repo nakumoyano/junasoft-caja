@@ -1,0 +1,771 @@
+<div class="grid grid-cols-12 gap-4 mt-16">
+  <app-sidebar></app-sidebar>
+  <div class="lg:col-span-8 sm:col-span-12">
+    <div class="lg:ml-32 md:ml-56 mt-4 lg:mx-0 md:mx-0 sm:mx-2">
+      <div class="p-4 border rounded-lg bg-white">
+        <div class="p-toolbar-group-start">
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol
+              class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse font-medium"
+            >
+              <li class="flex items-center uppercase">caja</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <div
+        class="text-sm mt-4 font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700"
+      >
+        <ul class="flex flex-wrap -mb-px">
+          <li class="me-2">
+            <a
+              (click)="selectTab('caja')"
+              class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-600"
+              [ngClass]="{
+                'text-blue-600 border-b-blue-600 bg-blue-100':
+                  activeTab === 'caja'
+              }"
+              >Caja</a
+            >
+          </li>
+          <li class="me-2">
+            <a
+              (click)="selectTab('movimientoCaja')"
+              class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-600"
+              [ngClass]="{
+                'text-blue-600 border-b-blue-600 bg-blue-100':
+                  activeTab === 'movimientoCaja'
+              }"
+              >Movimientos de Caja</a
+            >
+          </li>
+          <li class="me-2">
+            <a
+              (click)="selectTab('datosMovimientoCaja')"
+              class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 hover:border-blue-600"
+              [ngClass]="{
+                'text-blue-600 border-b-blue-600 bg-blue-100':
+                  activeTab === 'datosMovimientoCaja'
+              }"
+              >Datos de Movimientos de Caja</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <!-- TAB CAJA -->
+      <div *ngIf="activeTab === 'caja'">
+        <div class="relative shadow-md sm:rounded-lg bg-white mt-6">
+          <div
+            class="grid lg:grid-cols-2 gap-2 sm:grid-cols-1 bg-gray-800 rounded-t-lg p-2 items-center"
+          >
+            <div class="flex flex-col">
+              <h2 class="text-white">CAJA</h2>
+              <small class="text-slate-300">TOTAL DE VENTAS DE DÍA (0)</small>
+            </div>
+          </div>
+        </div>
+        <p-toolbar>
+          <div class="p-toolbar-group-start"></div>
+          <div class="p-toolbar-group-end">
+            <div class="flex">
+              <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt?.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Buscar"
+                />
+              </span>
+            </div>
+          </div>
+        </p-toolbar>
+        <p-card class="card">
+          <p-table
+            #dt
+            dataKey="id"
+            [rows]="10"
+            [loading]="loading"
+            [lazy]="false"
+            [showCurrentPageReport]="true"
+            [paginator]="true"
+            [paginatorPosition]="'bottom'"
+            selectionMode="single"
+            [totalRecords]="totalRecords"
+            [scrollable]="true"
+            [resizableColumns]="true"
+            [responsive]="true"
+            styleClass="p-datatable-gridlines p-datatable-sm"
+            [customSort]="true"
+            [scrollHeight]="'calc(100vh )'"
+            currentPageReportTemplate="Mostrando {first} a {last} de {{
+              totalRecords
+            }} elementos"
+            [globalFilterFields]="['nombresProductos', 'modoPago.modoPago']"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th scope="col" class="px-6 py-3">FECHA</th>
+                <th scope="col" class="px-6 py-3">PRODUCTOS</th>
+                <th scope="col" class="px-6 py-3">CANTIDADES</th>
+                <th scope="col" class="px-6 py-3">TOTAL DE FACTURA</th>
+                <th scope="col" class="px-6 py-3">MODO DE PAGO</th>
+                <th scope="col" class="px-6 py-3">ACCIÓN</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-venta>
+              <tr class="bg-white border-b hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  {{ venta.fechaHora | date : "dd/MM/YYYY" }}
+                </td>
+                <td class="px-6 py-4">
+                  <ng-container
+                    *ngIf="
+                      venta.nombresProductos &&
+                      venta.nombresProductos.length > 0
+                    "
+                  >
+                    {{ venta.nombresProductos.join(", ") }}
+                  </ng-container>
+                </td>
+                <td class="px-6 py-4">
+                  {{ venta.cantidades }}
+                </td>
+                <td class="px-6 py-4">{{ venta.totalFactura | currency }}</td>
+                <td class="px-6 py-4">{{ venta.modoPago?.modoPago }}</td>
+                <td class="px-6 py-4 flex gap-4">
+                  <div class="flex text-xl">
+                    <!-- <app-eliminar-elemento
+                      [elemento]="venta"
+                      (eliminado)="eliminar($event)"
+                    ></app-eliminar-elemento> -->
+                    <button
+                      class="text-black hover:bg-[#d4d2d2af] px-2 rounded"
+                      (click)="showDialog(venta)"
+                      title="Ver detalle"
+                    >
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">No hay ventas registradas el día de hoy.</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="p-mt-1 p-text-right"></div>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft"></ng-template>
+          </p-table>
+        </p-card>
+
+        <!-- total facturado del dia -->
+        <div
+          class="w-full flex items-center text-sm text-left text-black my-6 relative overflow-x-auto shadow-md sm:rounded-lg bg-white px-2 py-4 justify-between"
+        >
+          <div class="flex gap-4 items-center">
+            <h4 class="uppercase font-medium">
+              Total facturado el día de hoy:
+            </h4>
+            <span class="text-gray-500 font-medium">{{
+              totalFacturas | currency
+            }}</span>
+          </div>
+          <a routerLink="/admin/ventas/nueva-venta">
+            <button
+              class="text-blue-600 font-bold px-4 py-2 hover:bg-blue-50 rounded-lg"
+            >
+              Agregar venta
+            </button>
+          </a>
+        </div>
+        <form
+          action=""
+          [formGroup]="frmAddEditCaja"
+          class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4"
+        >
+          <!-- total facurado del dia seleccionado -->
+          <div
+            class="w-full flex items-center text-sm text-left text-black my-6 relative overflow-x-auto shadow-md sm:rounded-lg bg-white px-2 py-4 justify-between"
+          >
+            <div class="flex flex-col gap-4">
+              <div class="card flex gap-4">
+                <p-calendar
+                  [(ngModel)]="date"
+                  placeholder="Selecionar fecha"
+                  appendTo="body"
+                  formControlName="cajaDia"
+                  dateFormat="dd/mm/yy"
+                ></p-calendar>
+                <button
+                  (click)="onDaySelect()"
+                  [ngClass]="
+                    !frmAddEditCaja.get('cajaDia')?.value
+                      ? 'text-slate-600 font-bold px-4 py-2 border bg-slate-200 rounded-lg  cursor-not-allowed'
+                      : 'text-blue-600 font-bold px-4 py-2 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white'
+                  "
+                >
+                  Buscar
+                </button>
+              </div>
+              <div class="flex gap-4 items-center">
+                <p class="uppercase font-medium">
+                  Total facturado del día seleccionado:
+                </p>
+                <span class="text-gray-500 font-medium">{{
+                  totalFacturadoDia | currency
+                }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- total facturado del mes seleccioando -->
+          <div
+            class="w-full flex items-center text-sm text-left text-black my-6 relative overflow-x-auto shadow-md sm:rounded-lg bg-white px-2 py-4 justify-between"
+          >
+            <div class="flex flex-col gap-4">
+              <div class="card flex gap-4">
+                <p-calendar
+                  [(ngModel)]="dateMonth"
+                  placeholder="Selecionar mes"
+                  view="month"
+                  dateFormat="mm/yy"
+                  [readonlyInput]="true"
+                  formControlName="cajaMes"
+                  appendTo="body"
+                ></p-calendar>
+                <button
+                  (click)="onMonthSelect()"
+                  [ngClass]="
+                    !frmAddEditCaja.get('cajaMes')?.value
+                      ? 'text-slate-600 font-bold px-4 py-2 border bg-slate-200 rounded-lg  cursor-not-allowed'
+                      : 'text-blue-600 font-bold px-4 py-2 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white'
+                  "
+                >
+                  Buscar
+                </button>
+              </div>
+              <div class="flex gap-4 items-center">
+                <p class="uppercase font-medium">
+                  Total facturado del mes seleccionado:
+                </p>
+                <span class="text-gray-500 font-medium">{{
+                  totalFacturadoMes | currency
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB MOVIMIENTO CAJA -->
+      <div *ngIf="activeTab === 'movimientoCaja'">
+        <div class="relative shadow-md sm:rounded-lg bg-white mt-6">
+          <div
+            class="grid lg:grid-cols-2 gap-2 sm:grid-cols-1 bg-gray-800 rounded-t-lg p-2 items-center"
+          >
+            <div class="flex flex-col">
+              <h2 class="text-white">MOVIMIENTOS DE CAJA</h2>
+              <small class="text-slate-300"
+                >TOTAL DE MOVIMIENTOS DEL DÍA ({{
+                  obtenerTotalResultadosMovimientos()
+                }})</small
+              >
+            </div>
+          </div>
+        </div>
+        <p-toolbar>
+          <div class="p-toolbar-group-start"></div>
+          <div class="p-toolbar-group-end">
+            <div class="flex">
+              <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (input)="
+                    dt?.filterGlobal($any($event.target).value, 'contains')
+                  "
+                  placeholder="Buscar"
+                />
+              </span>
+            </div>
+          </div>
+        </p-toolbar>
+        <!-- MOVIMIENTO DE CAJA DEL DIA ACTUAL -->
+        <p-card class="card">
+          <p-table
+            #dt
+            [value]="movimientos"
+            dataKey="idMovimiento"
+            [rows]="5"
+            [loading]="loading"
+            [lazy]="false"
+            [showCurrentPageReport]="true"
+            [paginator]="true"
+            [paginatorPosition]="'bottom'"
+            selectionMode="single"
+            [totalRecords]="totalRecordsMovimientos"
+            [scrollable]="true"
+            [resizableColumns]="true"
+            [responsive]="true"
+            styleClass="p-datatable-gridlines p-datatable-sm"
+            [customSort]="true"
+            [scrollHeight]="'calc(100vh )'"
+            currentPageReportTemplate="Mostrando {first} a {last} de {{
+              totalRecordsMovimientos
+            }} elementos"
+            [globalFilterFields]="[
+              'tiposOperaciones.tipoOperacion',
+              'motivo',
+              'monto'
+            ]"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th scope="col" class="px-6 py-3">ACCIÓN</th>
+                <th scope="col" class="px-6 py-3">FECHA</th>
+                <th scope="col" class="px-6 py-3">TIPO DE OPERACIÓN</th>
+                <th scope="col" class="px-6 py-3">MONTO</th>
+                <th scope="col" class="px-6 py-3">MOTIVO</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-m>
+              <tr class="bg-white border-b hover:bg-gray-50">
+                <td class="px-6 py-4 flex gap-4">
+                  <div class="flex text-xl">
+                    <button
+                      class="text-black hover:bg-[#d4d2d2af] px-2 rounded"
+                      title="Editar Movimiento"
+                      [routerLink]="['/admin/caja/editar-caja', m.idMovimiento]"
+                    >
+                      <i
+                        class="fa-solid fa-pen-to-square text-gray-600 0 p-2 rounded-lg hover:cursor-pointer"
+                      ></i>
+                    </button>
+                    <!-- <app-eliminar-elemento
+                      [elemento]="m"
+                      (eliminado)="eliminarMovimiento($event)"
+                    ></app-eliminar-elemento> -->
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  {{ m.fechaMovimiento | date : "dd/MM/YYYY" }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ m.tiposOperaciones.tipoOperacion }}
+                </td>
+                <td class="px-6 py-4">{{ m.monto | currency }}</td>
+                <td class="px-6 py-4">
+                  {{ m.motivo || "No hay motivo registrado" }}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">
+                  No hay movimientos registrados el día de hoy.
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="p-mt-1 p-text-right"></div>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft"></ng-template>
+          </p-table>
+        </p-card>
+
+        <!-- MOVIMIENTOS DE CAJAS DE DIA SELECCIONADOS -->
+        <p-card class="card" [style]="{ 'margin-top': '20px' }">
+          <!-- MOVIMIENTOS DEL DIA SELECCIONADO -->
+          <form action="" [formGroup]="frmAddEditDiaSeleccionado" class="">
+            <div
+              class="w-full flex items-center text-sm text-left text-black relative overflow-x-auto py-4 justify-between"
+            >
+              <div class="flex items-center gap-4">
+                <div class="flex gap-4 items-center">
+                  <p class="uppercase font-medium">
+                    MOVIMIENTOS DEL DÍA SELECCIONADO:
+                  </p>
+                </div>
+                <div class="card flex gap-4">
+                  <p-calendar
+                    [(ngModel)]="date"
+                    placeholder="Selecionar fecha"
+                    appendTo="body"
+                    formControlName="diaSeleccionado"
+                    dateFormat="dd/mm/yy"
+                  ></p-calendar>
+                  <button
+                    (click)="getMovimientoByDiaSeleccionado()"
+                    [ngClass]="
+                      !frmAddEditDiaSeleccionado.get('diaSeleccionado')?.value
+                        ? 'text-slate-600 font-bold px-4 py-2 border bg-slate-200 rounded-lg  cursor-not-allowed'
+                        : 'text-blue-600 font-bold px-4 py-2 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white'
+                    "
+                  >
+                    Buscar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- TABLA DE MOVIMIENTOS DEL DIA SELECCIONADO -->
+          <p-table
+            #dt
+            [value]="movimientosDiaSeleccionado"
+            dataKey="id"
+            [rows]="10"
+            [loading]="loading"
+            [lazy]="false"
+            [showCurrentPageReport]="true"
+            [paginator]="true"
+            [paginatorPosition]="'bottom'"
+            selectionMode="single"
+            [totalRecords]="totalRecords"
+            [scrollable]="true"
+            [resizableColumns]="true"
+            [responsive]="true"
+            styleClass="p-datatable-gridlines p-datatable-sm"
+            [customSort]="true"
+            [scrollHeight]="'calc(100vh )'"
+            currentPageReportTemplate="Mostrando {first} a {last} de {{
+              totalRecords
+            }} elementos"
+            [globalFilterFields]="['nombresProductos', 'modoPago.modoPago']"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th scope="col" class="px-6 py-3">ACCIÓN</th>
+                <th scope="col" class="px-6 py-3">FECHA</th>
+                <th scope="col" class="px-6 py-3">TIPO DE OPERACIÓN</th>
+                <th scope="col" class="px-6 py-3">MONTO</th>
+                <th scope="col" class="px-6 py-3">MOTIVO</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-m>
+              <tr class="bg-white border-b hover:bg-gray-50">
+                <td class="px-6 py-4 flex gap-4">
+                  <div class="flex text-xl">
+                    <button
+                      class="text-black hover:bg-[#d4d2d2af] px-2 rounded"
+                      title="Editar Movimiento"
+                      [routerLink]="['/admin/caja/editar-caja', m.idMovimiento]"
+                    >
+                      <i
+                        class="fa-solid fa-pen-to-square text-gray-600 hover:bg-gray-100 p-2 rounded-lg hover:cursor-pointer"
+                      ></i>
+                    </button>
+                    <!-- <app-eliminar-elemento
+                      [elemento]="m"
+                      (eliminado)="eliminarMovimiento($event)"
+                    ></app-eliminar-elemento> -->
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  {{ m.fechaMovimiento | date : "dd/MM/YYYY" }}
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ m.tiposOperaciones.tipoOperacion }}
+                </td>
+                <td class="px-6 py-4">{{ m.monto | currency }}</td>
+                <td class="px-6 py-4">
+                  {{ m.motivo || "No hay motivo registrado" }}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">
+                  No hay movimientos registrados el día seleccionado.
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="p-mt-1 p-text-right"></div>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft"></ng-template>
+          </p-table>
+        </p-card>
+      </div>
+
+      <!-- TAB DATOS MOVIMIENTO CAJKA -->
+      <div
+        *ngIf="activeTab === 'datosMovimientoCaja'"
+        class="flex flex-col gap-4"
+      >
+        <!-- APERTURA DE CAJA -->
+        <div
+          class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white"
+        >
+          <fieldset class="border border-solid border-gray-300 p-3 mt-2">
+            <legend class="text-lg font-bold px-2 uppercase">
+              APERTURA DE CAJA
+            </legend>
+            <form
+              action=""
+              [formGroup]="frmAddEditAperturaCaja"
+              class="flex flex-col gap-4"
+            >
+              <div
+                class="w-full flex flex-col text-sm text-left text-black relative overflow-x-auto py-4"
+              >
+                <div class="flex flex-col">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="montoApertura"
+                    >Monto de apertura</label
+                  >
+                  <input
+                    type="number"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Monto de la apertura de caja"
+                    id="montoApertura"
+                    formControlName="monto"
+                  />
+                </div>
+              </div>
+              <div class="flex">
+                <button
+                  type="submit"
+                  class="text-white bg-blue-600 lg:w-auto md:w-auto w-full hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  (click)="cargarAperturaCaja()"
+                >
+                  <i class="fa-regular fa-floppy-disk mr-1"></i>
+
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </fieldset>
+        </div>
+        <!-- RETIRO DE CAJA -->
+        <div
+          class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white"
+        >
+          <fieldset class="border border-solid border-gray-300 p-3 mt-2">
+            <legend class="text-lg font-bold px-2 uppercase">
+              RETIRO DE CAJA
+            </legend>
+            <form
+              action=""
+              [formGroup]="frmAddEditRetiro"
+              class="flex flex-col gap-4"
+            >
+              <div
+                class="w-full flex flex-col text-sm text-left text-black relative overflow-x-auto py-4"
+              >
+                <div class="flex flex-col">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="montoRetiro"
+                    >Monto de retiro</label
+                  >
+                  <input
+                    type="number"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Monto del retiro de caja"
+                    formControlName="montoRetiro"
+                    id="montoRetiro"
+                  />
+                </div>
+                <div class="flex flex-col mt-4">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="motivoRetiro"
+                    >Motivo de retiro</label
+                  >
+                  <input
+                    type="text"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Motivo del retiro de caja"
+                    id="motivoRetiro"
+                    formControlName="motivoRetiro"
+                  />
+                </div>
+              </div>
+              <div class="flex">
+                <button
+                  type="submit"
+                  class="text-white bg-blue-600 lg:w-auto md:w-auto w-full hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  (click)="cargarRetiroCaja()"
+                >
+                  <i class="fa-regular fa-floppy-disk mr-1"></i>
+
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </fieldset>
+        </div>
+        <!-- CIERRE DE CAJA -->
+        <div
+          class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white"
+        >
+          <fieldset class="border border-solid border-gray-300 p-3 mt-2">
+            <legend class="text-lg font-bold px-2 uppercase">
+              CIERRE DE CAJA
+            </legend>
+            <form
+              action=""
+              [formGroup]="frmAddEditCierreCaja"
+              class="flex flex-col gap-4"
+            >
+              <div
+                class="w-full flex flex-col text-sm text-left text-black relative overflow-x-auto py-4"
+              >
+                <div class="flex flex-col">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="montoCierre"
+                    >Monto de cierre</label
+                  >
+                  <input
+                    type="text"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Monto del cierre de caja"
+                    formControlName="montoCierre"
+                    id="montoCierre"
+                  />
+                </div>
+              </div>
+              <div class="flex">
+                <button
+                  type="submit"
+                  class="text-white bg-blue-600 lg:w-auto md:w-auto w-full hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  (click)="cargarCierreCaja()"
+                >
+                  <i class="fa-regular fa-floppy-disk mr-1"></i>
+
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="h-full flex flex-col gap-y-4 rounded-lg lg:block md:hidden sm:hidden mt-4"
+  >
+    <app-panel-right></app-panel-right>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '70vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-container flex flex-col gap-y-2" *ngIf="ventaSeleccionada">
+    <div class="modal-header flex gap-4 mb-3 items-center">
+      <h3 class="uppercase text-md">Venta realizada</h3>
+      <span>
+        {{ ventaSeleccionada.fechaHora | date : "dd/MM/YYYY" }}
+      </span>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-x-8">
+      <!-- lado izquierdo -->
+      <div class="">
+        <div class="modal-body flex gap-y-4 uppercase">
+          <!-- PRODUCTOS -->
+          <div class="flex flex-col">
+            <span class="text-sm text-slate-500 text-left uppercase font-bold"
+              >Nombre del o los productos
+            </span>
+            <span class="text-xs">
+              <ng-container
+                *ngIf="
+                  ventaSeleccionada.nombresProductos &&
+                  ventaSeleccionada.nombresProductos.length > 0
+                "
+                class="flex flex-col"
+              >
+                <ng-container
+                  *ngFor="
+                    let nombreProducto of ventaSeleccionada.nombresProductos
+                  "
+                >
+                  <ul class="list-disc px-4 py-1">
+                    <li class="cursor-text">
+                      {{ nombreProducto }}
+                      ------------
+                    </li>
+                  </ul>
+                </ng-container>
+              </ng-container>
+            </span>
+          </div>
+          <!-- CANTIDADES -->
+          <div class="flex flex-col">
+            <span class="text-sm text-slate-500 text-left uppercase font-bold"
+              >Cantidades por producto
+            </span>
+            <span class="text-xs">
+              <ng-container
+                *ngIf="
+                  ventaSeleccionada.cantidades &&
+                  ventaSeleccionada.cantidades.length > 0
+                "
+              >
+                <ng-container
+                  *ngFor="
+                    let cantidad of ventaSeleccionada.cantidades.split(',')
+                  "
+                >
+                  <ul class="list-disc px-4 py-1">
+                    <li class="cursor-text">
+                      {{ cantidad }}
+                    </li>
+                  </ul>
+                </ng-container>
+              </ng-container>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- LADO DERECHO -->
+      <div class="">
+        <div class="modal-body flex flex-col gap-y-4 uppercase">
+          <!-- CANTIDADES -->
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="flex flex-col">
+      <div class="">
+        <div class="modal-body flex flex-col gap-y-4 uppercase">
+          <!-- MODO PAGO -->
+          <div class="flex flex-col">
+            <h4 class="text text-black text-left uppercase font-bold">
+              modo de pago
+            </h4>
+            <p class="text-base">
+              {{ ventaSeleccionada.modoPago?.modoPago }}
+            </p>
+          </div>
+          <!-- PRODUCTOS -->
+          <div class="flex flex-col">
+            <h4 class="text text-black text-left uppercase font-bold">
+              Total de la factura
+            </h4>
+            <p class="text-base">
+              {{ ventaSeleccionada.totalFactura | currency }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

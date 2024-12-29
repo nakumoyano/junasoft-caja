@@ -8,7 +8,9 @@ import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { HttpClientModule } from '@angular/common/http';
 import { AccordionModule } from 'primeng/accordion';
+import { ToolbarModule } from 'primeng/toolbar';
 import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -25,9 +27,26 @@ import { ListadoDeCategoriasComponent } from './panel/categorias/listado-de-cate
 import { AgregarProductoComponent } from './panel/productos/agregar-producto/agregar-producto.component';
 import { ListadoDeProductosComponent } from './panel/productos/listado-de-productos/listado-de-productos.component';
 import { CrearAdministradorComponent } from './panel/administradores/crear-administrador/crear-administrador.component';
+import { CajaComponent } from './panel/caja/caja/caja.component';
+import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/editar-apertura-caja.component';
 
 @NgModule({
-  declarations: [AppComponent, SidebarComponent, BotonCancelarComponent, BotonEliminarComponent, PanelRightComponent, SkeletonGridComponent, DashboardComponent, AgregarCategoriaComponent, ListadoDeCategoriasComponent, AgregarProductoComponent, ListadoDeProductosComponent, CrearAdministradorComponent],
+  declarations: [
+    AppComponent,
+    SidebarComponent,
+    BotonCancelarComponent,
+    BotonEliminarComponent,
+    PanelRightComponent,
+    SkeletonGridComponent,
+    DashboardComponent,
+    AgregarCategoriaComponent,
+    ListadoDeCategoriasComponent,
+    AgregarProductoComponent,
+    ListadoDeProductosComponent,
+    CrearAdministradorComponent,
+    CajaComponent,
+    EditarAperturaCajaComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -39,7 +58,9 @@ import { CrearAdministradorComponent } from './panel/administradores/crear-admin
     HttpClientModule,
     ConfirmDialogModule,
     AccordionModule,
+    ToolbarModule,
     CardModule,
+    CalendarModule,
     DropdownModule,
     ToastrModule.forRoot({
       timeOut: 3000,

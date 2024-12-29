@@ -6,6 +6,8 @@ import { ListadoDeCategoriasComponent } from './panel/categorias/listado-de-cate
 import { AgregarProductoComponent } from './panel/productos/agregar-producto/agregar-producto.component';
 import { ListadoDeProductosComponent } from './panel/productos/listado-de-productos/listado-de-productos.component';
 import { CrearAdministradorComponent } from './panel/administradores/crear-administrador/crear-administrador.component';
+import { CajaComponent } from './panel/caja/caja/caja.component';
+import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/editar-apertura-caja.component';
 
 const routes: Routes = [
   // DASHBOARD
@@ -51,6 +53,17 @@ const routes: Routes = [
     path: 'admin/administradores/registrar-administrador',
     component: CrearAdministradorComponent,
     data: { title: 'Registrar Administrador | Junasoft - Caja' },
+  },
+  // CAJA
+  {
+    path: 'admin/caja',
+    component: CajaComponent,
+    data: { title: 'Caja' },
+  },
+  {
+    path: 'admin/caja/editar-caja/:id',
+    component: EditarAperturaCajaComponent,
+    data: { title: 'Caja - Editar caja' },
   },
 ];
 
