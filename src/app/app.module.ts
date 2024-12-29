@@ -20,9 +20,14 @@ import { BotonEliminarComponent } from './components/boton-eliminar/boton-elimin
 import { PanelRightComponent } from './components/panel-right/panel-right.component';
 import { SkeletonGridComponent } from './components/skeleton-grid/skeleton-grid.component';
 import { DashboardComponent } from './panel/dashboard/dashboard.component';
+import { AgregarCategoriaComponent } from './panel/categorias/agregar-categoria/agregar-categoria.component';
+import { ListadoDeCategoriasComponent } from './panel/categorias/listado-de-categorias/listado-de-categorias.component';
+import { AgregarProductoComponent } from './panel/productos/agregar-producto/agregar-producto.component';
+import { ListadoDeProductosComponent } from './panel/productos/listado-de-productos/listado-de-productos.component';
+import { CrearAdministradorComponent } from './panel/administradores/crear-administrador/crear-administrador.component';
 
 @NgModule({
-  declarations: [AppComponent, SidebarComponent, BotonCancelarComponent, BotonEliminarComponent, PanelRightComponent, SkeletonGridComponent, DashboardComponent],
+  declarations: [AppComponent, SidebarComponent, BotonCancelarComponent, BotonEliminarComponent, PanelRightComponent, SkeletonGridComponent, DashboardComponent, AgregarCategoriaComponent, ListadoDeCategoriasComponent, AgregarProductoComponent, ListadoDeProductosComponent, CrearAdministradorComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
