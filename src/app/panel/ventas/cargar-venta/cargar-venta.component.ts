@@ -33,6 +33,8 @@ export class CargarVentaComponent implements OnInit {
   selectedProducto: string;
   selectedModoPago: any;
 
+  isEdit = false;
+
   selectedDate: string;
 
   date: Date;

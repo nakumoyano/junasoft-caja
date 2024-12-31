@@ -29,6 +29,12 @@ export class CajaService {
   private API_URL_FACTURADO_DIA =
     'https://apicaja.junasoft.com/MovimientosCaja/FacturacionDelDia';
 
+  private API_URL_FACTURADO_DIA_SELECCIONADO =
+    'https://apicaja.junasoft.com/MovimientosCaja/FacturacionDelDiaSeleccionado';
+
+  private API_URL_FACTURADO_MES_SELECCIONADO =
+    'https://apicaja.junasoft.com/MovimientosCaja/FacturacionDelMesSeleccionado';
+
   constructor(private http: HttpClient) {}
 
   // MOSTRAR DATOS
@@ -104,6 +110,18 @@ export class CajaService {
   // MOVIMIENTO DIA SELECCIONADO (listo)
   getDataByDay(fecha: string): Observable<Caja[]> {
     const url = `${this.API_URL_BY_DIA_SELECCIONADO}?fecha=${fecha}`;
+    return this.http.get<Caja[]>(url);
+  }
+
+  // FACTURACION DIA SELECCIONADO (listo)
+  getFacturacionDiaSeleccionado(fecha: string): Observable<Caja[]> {
+    const url = `${this.API_URL_FACTURADO_DIA_SELECCIONADO}?fecha=${fecha}`;
+    return this.http.get<Caja[]>(url);
+  }
+
+  // FACTURACION MES SELECCIONADO (listo)
+  getDataByMonth(fecha: string): Observable<Caja[]> {
+    const url = `${this.API_URL_FACTURADO_MES_SELECCIONADO}?fecha=${fecha}`;
     return this.http.get<Caja[]>(url);
   }
 

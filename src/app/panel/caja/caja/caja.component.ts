@@ -194,19 +194,20 @@ export class CajaComponent implements OnInit {
     this.visible = true;
   }
 
+  // D********************************** FUNCION POARA OBTENER FACTURACION MES SELECCIONADO ****************
   onMonthSelect(): void {
     const dateMonth = this.frmAddEditCaja.get('cajaMes')?.value;
     if (dateMonth) {
       const month = this.formatDateToMonthString(dateMonth);
-      // this.ventasService.getDataByMonth(month).subscribe(
-      //   (total: any) => {
-      //     this.totalFacturadoMes = total;
-      //     this.frmAddEditCaja.get('cajaMes')?.reset();
-      //   },
-      //   (error) => {
-      //     console.error('Error al obtener datos por mes:', error);
-      //   }
-      // );
+      this.cajaService.getDataByMonth(month).subscribe(
+        (total: any) => {
+          this.totalFacturadoMes = total;
+          this.frmAddEditCaja.get('cajaMes')?.reset();
+        },
+        (error) => {
+          console.error('Error al obtener datos por mes:', error);
+        }
+      );
     }
   }
 
@@ -216,19 +217,21 @@ export class CajaComponent implements OnInit {
     return `${month}/${year}`;
   }
 
+  // D********************************** FUNCION POARA OBTENER FACTURACION DIA SELECCIONADO ****************
   onDaySelect(): void {
     const dateDay = this.frmAddEditCaja.get('cajaDia')?.value;
     if (dateDay) {
       const day = this.formatDateToDayString(dateDay);
-      // this.ventasService.getDataByDay(day).subscribe(
-      //   (total: any) => {
-      //     this.totalFacturadoDia = total;
-      //     this.frmAddEditCaja.get('cajaDia')?.reset();
-      //   },
-      //   (error) => {
-      //     console.error('Error al obtener datos por día:', error);
-      //   }
-      // );
+      this.cajaService.getFacturacionDiaSeleccionado(day).subscribe(
+        (total: any) => {
+          console.log('total dia seleccionado', total);
+          this.totalFacturadoDia = total;
+          this.frmAddEditCaja.get('cajaDia')?.reset();
+        },
+        (error) => {
+          console.error('Error al obtener datos por día:', error);
+        }
+      );
     }
   }
 
