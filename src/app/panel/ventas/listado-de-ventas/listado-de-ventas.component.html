@@ -1,1 +1,179 @@
-<p>listado-de-ventas works!</p>
+<div class="grid grid-cols-12 gap-4 mt-16 h-screen">
+  <app-sidebar></app-sidebar>
+
+  <div class="lg:col-span-8 sm:col-span-12">
+    <div class="lg:ml-32 md:ml-56 mt-4 lg:mx-0 md:mx-0 sm:mx-2">
+      <div class="p-4 border rounded-lg bg-white">
+        <div class="p-toolbar-group-start">
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol
+              class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse font-medium"
+            >
+              <li class="flex items-center uppercase">ventas</li>
+
+              <li class="flex items-center uppercase">
+                <div class="flex items-center">
+                  <svg
+                    class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 9 4-4-4-4"
+                    />
+                  </svg>
+                  listado de ventas
+                </div>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="relative shadow-md sm:rounded-lg bg-white mt-6">
+        <div
+          class="grid lg:grid-cols-2 gap-2 sm:grid-cols-1 bg-gray-800 rounded-t-lg p-2 items-center"
+        >
+          <div class="flex flex-col">
+            <h3 class="text-white uppercase">Listado de ventas</h3>
+            <small class="text-slate-300 uppercase text-xs"
+              >Total de ventas ({{ obtenerTotalResultados() || 0 }})</small
+            >
+          </div>
+          <div class="flex justify-end">
+            <button
+              class="items-center flex bg-green-500 hover:bg-green-600 text-white gap-2 px-4 text-sm py-2 rounded"
+              (click)="navigateToVenta()"
+            >
+              <i class="fa-solid fa-plus"></i>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="border rounded flex justify-between p-4">
+        <div class="p-toolbar-group-start items-center flex"></div>
+        <div class="p-toolbar-group-end flex gap-4">
+          <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+              <input
+                type="text"
+                (input)="
+                  dt?.filterGlobal($any($event.target).value, 'contains')
+                "
+                placeholder="Buscar"
+                [style]="{
+                  'border-radius': '4px',
+                  border: '1px solid #D4D8DD',
+                  height: '40px'
+                }"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p-card class="card">
+        <p-table
+          #dt
+          [value]="ventas"
+          dataKey="id"
+          [rows]="5"
+          [loading]="loading"
+          [lazy]="false"
+          [showCurrentPageReport]="true"
+          [paginator]="true"
+          [paginatorPosition]="'bottom'"
+          selectionMode="single"
+          [totalRecords]="totalRecords"
+          [scrollable]="true"
+          [resizableColumns]="true"
+          [responsive]="true"
+          styleClass="p-datatable-gridlines p-datatable-sm"
+          [style]="{ 'border-collapse': 'separate', 'border-spacing': 0 }"
+          [customSort]="true"
+          [scrollHeight]="'calc(100vh )'"
+          currentPageReportTemplate="{first} a {last} de {{
+            totalRecords
+          }} elementos"
+          [globalFilterFields]="[
+            'usuarios.nombreCompleto',
+            'montoTotal',
+            'fechaHora',
+            'tiposPago.tipoPago'
+          ]"
+        >
+          <ng-template pTemplate="header">
+            <tr class="border">
+              <th
+                scope="col"
+                class="px-6 py-3 uppercase border-r"
+                style="width: 100px"
+              >
+                Acción
+              </th>
+              <th scope="col" class="px-6 py-3 uppercase">monto total</th>
+              <th scope="col" class="px-6 py-3 uppercase">tipo de pago</th>
+              <th scope="col" class="px-6 py-3 uppercase">usuario encargado</th>
+              <th scope="col" class="px-6 py-3 uppercase">fecha</th>
+            </tr></ng-template
+          >
+
+          <ng-template pTemplate="body" let-i>
+            <tr class="bg-white border-b hover:bg-gray-50 border">
+              <td class="px-6 py-3 flex gap-4 border-r">
+                <div class="flex gap-1">
+                  <!-- BOTON EDITAR -->
+                  <button
+                    class="px-2 py-1 h-8 bg-blue-600 hover:bg-blue-700 rounded text-white"
+                    title="Editar"
+                    [routerLink]="['/admin/ventas/editar-venta', i.idVenta]"
+                  >
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <!-- BOTON ELIMINAR -->
+                  <app-boton-eliminar
+                    [elemento]="i"
+                    (eliminado)="eliminar($event)"
+                  >
+                  </app-boton-eliminar>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm border-r font-bold uppercase">
+                {{ i.montoTotal | currency }}
+              </td>
+              <td class="px-6 py-4 text-sm border-r font-bold uppercase">
+                {{ i.tipoPagos?.tipoPago }}
+              </td>
+              <td class="px-6 py-4 text-sm border-r font-bold uppercase">
+                {{ i.usuarios?.nombreCompleto }}
+              </td>
+              <td class="px-6 py-4 text-sm border-r font-bold uppercase">
+                {{ i.fechaHora | date : "dd/MM/yyyy" }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7">No hay ventas registradas.</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <div class="p-mt-1 p-text-right"></div>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft"></ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+  <div
+    class="h-full flex flex-col gap-y-4 rounded-lg lg:block md:hidden sm:hidden mt-4"
+  >
+    <app-panel-right></app-panel-right>
+  </div>
+</div>

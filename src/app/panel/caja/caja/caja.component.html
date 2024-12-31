@@ -120,7 +120,11 @@
               >
                 <div class="flex gap-4 items-center">
                   <i
-                    class="fa-solid fa-hand-holding-dollar border border-black rounded-full p-2"
+                    [ngClass]="
+                      venta.tipoPagos?.idTipoPago === 1
+                        ? 'fa-solid fa-hand-holding-dollar border border-black rounded-full p-2'
+                        : 'fa-solid fa-credit-card border border-black rounded-full p-2'
+                    "
                   ></i>
                   <p>{{ venta.tipoPagos?.tipoPago }}</p>
                 </div>
