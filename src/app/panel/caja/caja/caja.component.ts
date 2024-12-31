@@ -413,6 +413,7 @@ export class CajaComponent implements OnInit {
     );
   }
 
+  // S************************* FUNCION PARA MOSTRAR VENTAS DEL DIA *********************
   facturacionDelDia = '';
   getFacturacionDia() {
     this.loading = true;

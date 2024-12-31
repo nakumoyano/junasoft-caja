@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Venta } from 'src/app/models/venta/venta';
+import { CajaService } from 'src/app/services/caja/caja.service';
 import { VentasService } from 'src/app/services/ventas/ventas.service';
 
 @Component({
@@ -25,7 +26,7 @@ export class DashboardComponent implements OnInit {
     private toastr: ToastrService,
     // private userService: UsuariosService,
     // private clientesService: ClientesService,
-    // private vehiculosService: VehiculosService,
+    private cajaService: CajaService,
     private ventasService: VentasService,
     private router: Router // private pagosService: PagosService
   ) {}
@@ -36,6 +37,7 @@ export class DashboardComponent implements OnInit {
     this.getAllDataUsuarioNoAlDia();
     this.getAllDataFacturacionMes();
     this.getAllTotalVentas();
+    this.getFacturacionDia();
   }
 
   // S************************* FUNCION PARA MOSTRAR CLIENTES*********************
@@ -95,20 +97,20 @@ export class DashboardComponent implements OnInit {
   // S************************* FUNCION PARA MOSTRAR TOTAL DE INGRESOS DEL MES *********************
   getAllDataFacturacionMes() {
     this.loading = true;
-    // this.pagosService.getAllFacturacionDelMes().subscribe(
-    //   (data: any) => {
-    //     // console.log('datos de ingresos', data);
-    //     const ingresos = data;
+    this.ventasService.getAllFacturacionDelMes().subscribe(
+      (data: any) => {
+        console.log('datos de ingresos', data);
+        const ingresos = data;
 
-    //     this.ingresos = ingresos; // Convierte ingresos a número si no lo es ya
+        this.ingresos = ingresos; // Convierte ingresos a número si no lo es ya
 
-    //     // console.log(this.ventas);
-    //     this.loading = false;
-    //   },
-    //   (error) => {
-    //     console.error('Error al obtener las ingresos', error);
-    //   }
-    // );
+        // console.log(this.ventas);
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error al obtener las ingresos', error);
+      }
+    );
   }
   // S************************* FUNCION PARA MOSTRAR TOTAL DE VENTAS *********************
   getAllTotalVentas() {
@@ -155,5 +157,22 @@ export class DashboardComponent implements OnInit {
   // S************************* FUNCION PARA MOSTRAR INGRESOS *********************
   toggleIngresos() {
     this.mostrarIngresos = !this.mostrarIngresos;
+  }
+
+  // S************************* FUNCION PARA MOSTRAR VENTAS DEL DIA *********************
+  facturacionDelDia = '';
+  getFacturacionDia() {
+    this.loading = true;
+
+    this.cajaService.getFacturadoDelDia().subscribe(
+      (data: any) => {
+        console.log('factuacion dia', data);
+        this.facturacionDelDia = data;
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error al obtener los ventas', error);
+      }
+    );
   }
 }

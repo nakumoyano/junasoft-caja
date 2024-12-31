@@ -10,10 +10,18 @@ export class VentasService {
   private API_URL =
     'https://apicaja.junasoft.com/MovimientosCaja/IngresosDelDia';
 
+  private API_URL_FACTURACION_MES =
+    'https://apicaja.junasoft.com/MovimientosCaja/FacturacionDelMes';
+
   constructor(private http: HttpClient) {}
 
   // MOSTRAR DATOS
   getAllData(): Observable<Venta[]> {
     return this.http.get<Venta[]>(this.API_URL);
+  }
+
+  // MOSTRAR DATOS FACTUACION DELMES
+  getAllFacturacionDelMes(): Observable<Venta[]> {
+    return this.http.get<Venta[]>(this.API_URL_FACTURACION_MES);
   }
 }
