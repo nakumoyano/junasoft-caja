@@ -19,7 +19,8 @@
         </div>
       </div>
       <!-- CARDS CON DATOS NUMERICOS -->
-      <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 mb-4">
+      <div class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 mb-4">
+        <!-- CARD 1 -->
         <div class="flex items-center h-24 p-2 rounded bg-white drop-shadow">
           <div class="flex items-center gap-x-4">
             <i
@@ -50,47 +51,20 @@
             </div>
           </div>
         </div>
-        <!-- <a
-          routerLink="/admin/caja"
-          class="flex items-center h-24 p-2 rounded bg-white drop-shadow"
-        >
-          <div class="flex items-center gap-x-4">
-            <i
-              class="fa-solid fa-cash-register text-[25px] p-4 rounded text-green-600 bg-green-100"
-            ></i>
-            <div class="flex flex-col">
-              <h3 class="text-xl font-bold">$20.000</h3>
-              <p class="text-sm text-[#96989b]">Total de plata en caja</p>
-            </div>
-          </div>
-        </a> -->
-        <a
-          [routerLink]="'/admin/clientes/listado-de-clientes'"
-          class="flex items-center h-24 p-2 rounded bg-white hover:bg-slate-100 drop-shadow"
-        >
-          <div class="flex items-center gap-x-4">
-            <i
-              class="fa-solid fa-user text-[25px] p-4 rounded text-blue-600 bg-blue-100"
-            ></i>
-            <div class="flex flex-col">
-              <h3 class="text-2xl">{{ obtenerTotalResultados() || 0 }}</h3>
-              <p class="text-sm text-[#96989b]">Clientes</p>
-            </div>
-          </div>
-        </a>
+        <!-- CARD 2 -->
         <a
           [routerLink]="'/admin/ventas/listado-de-ventas'"
           class="flex items-center h-24 p-2 rounded bg-white hover:bg-slate-100 drop-shadow"
         >
           <div class="flex items-center gap-x-4">
             <i
-              class="fa-solid fa-car text-[25px] p-4 rounded text-green-600 bg-green-100"
+              class="fa-solid fa-sack-dollar text-[25px] p-4 rounded text-blue-600 bg-blue-100"
             ></i>
             <div class="flex flex-col">
               <h3 class="text-2xl">
-                {{ obtenerTotalResultadosVehiculos() || 0 }}
+                {{ obtenerTotalResultadosVentas() || 0 }}
               </h3>
-              <p class="text-sm text-[#96989b]">Vehículos vendidos</p>
+              <p class="text-sm text-[#96989b]">Ventas</p>
             </div>
           </div>
         </a>
@@ -100,9 +74,7 @@
       <fieldset
         class="grid grid-cols-12 border border-solid border-gray-200 drop-shadow p-3 my-2 rounded bg-white"
       >
-        <legend class="text-lg font-bold px-2 uppercase">
-          REUNIONES PARA HOY
-        </legend>
+        <legend class="text-lg font-bold px-2 uppercase">VENTAS DE HOY</legend>
 
         <ng-container *ngIf="usuarios && usuarios.length > 0; else noUsuarios">
           <div class="table-container col-span-12">
@@ -156,9 +128,7 @@
             class="col-span-12 justify-center text-center text-2xl py-4 text-slate-400 flex flex-col gap-4"
           >
             <i class="fa-solid fa-clipboard-check text-[60px]"></i>
-            <p class="font-thin uppercase">
-              No hay reuniones para el día de hoy.
-            </p>
+            <p class="font-thin uppercase">No hay ventas el día de hoy.</p>
           </div>
         </ng-template>
         <div

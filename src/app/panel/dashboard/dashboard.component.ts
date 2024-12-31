@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Venta } from 'src/app/models/venta/venta';
+import { VentasService } from 'src/app/services/ventas/ventas.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +13,7 @@ export class DashboardComponent implements OnInit {
   @Input() vehiculos: any[];
   @Input() clientes: any[];
   @Input() usuarios: any[];
+  @Input() ventas: Venta[];
 
   ingresos: number = 0;
 
@@ -23,7 +26,7 @@ export class DashboardComponent implements OnInit {
     // private userService: UsuariosService,
     // private clientesService: ClientesService,
     // private vehiculosService: VehiculosService,
-    // private ventasService: VentasService,
+    private ventasService: VentasService,
     private router: Router // private pagosService: PagosService
   ) {}
 
@@ -32,6 +35,7 @@ export class DashboardComponent implements OnInit {
     this.getAllDataVehiculos();
     this.getAllDataUsuarioNoAlDia();
     this.getAllDataFacturacionMes();
+    this.getAllTotalVentas();
   }
 
   // S************************* FUNCION PARA MOSTRAR CLIENTES*********************
@@ -106,6 +110,24 @@ export class DashboardComponent implements OnInit {
     //   }
     // );
   }
+  // S************************* FUNCION PARA MOSTRAR TOTAL DE VENTAS *********************
+  getAllTotalVentas() {
+    this.loading = true;
+    this.ventasService.getAllData().subscribe(
+      (data: any) => {
+        // console.log('datos de ingresos', data);
+        const ventas = data.resultado;
+
+        this.ventas = ventas; // Convierte ingresos a número si no lo es ya
+
+        // console.log(this.ventas);
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error al obtener las ingresos', error);
+      }
+    );
+  }
 
   // S************************* FUNCION PARA OBTENER TOTAL DE RESULETADOS *********************
   // CLIENTES
@@ -113,9 +135,9 @@ export class DashboardComponent implements OnInit {
     return this.clientes?.length;
   }
 
-  // VEWHICULOS
-  obtenerTotalResultadosVehiculos(): number {
-    return this.vehiculos?.length;
+  // VENTAS
+  obtenerTotalResultadosVentas(): number {
+    return this.ventas?.length;
   }
 
   // S************************* FUNCION PARA HACER ENVIO POR WPP *********************

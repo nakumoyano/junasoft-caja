@@ -19,7 +19,7 @@
 .card {
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(https://lh3.googleusercontent.com/p/AF1QipMwAGnEgWNMM6SjldwlI5k4lQbYIfZhrGoXx8zb=s680-w680-h510);
+  background-image: url("https://imagenes.elpais.com/resizer/v2/MBAX3IRTQU5D3JD6N5YGCY6K6U.jpg?auth=d2b458b22f84e9c8a89112db69811945987f71682ef33baaadb3593d3a55fd8d&width=1960&height=1103&smart=true");
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;
