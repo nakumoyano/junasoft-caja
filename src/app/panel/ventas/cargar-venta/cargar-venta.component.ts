@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ProductosService } from 'src/app/services/productos/productos.service';
 import { TiposPagosService } from 'src/app/services/tipos-pagos/tipos-pagos.service';
+import { VentasService } from 'src/app/services/ventas/ventas.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -44,7 +45,8 @@ export class CargarVentaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private toastr: ToastrService,
-    private modoPagoService: TiposPagosService // private ventaService: VentasService
+    private modoPagoService: TiposPagosService,
+    private ventaService: VentasService
   ) {}
 
   ngOnInit(): void {
@@ -175,51 +177,76 @@ export class CargarVentaComponent implements OnInit {
   }
 
   // Método para preparar los datos de la venta
+  // prepareVentaData() {
+  //   return {
+  //     idVenta: 0,
+  //     fechaHora: '',
+  //     totalFactura: this.getTotal(),
+  //     lstDetalleVenta: this.productosAgregados.map((p) =>
+  //       p.producto.idProducto.toString()
+  //     ),
+  //     cantidades: this.productosAgregados.map((p) => p.cantidad.toString()),
+  //     idUsuario: 1,
+  //     idTipoPago: this.frmAddEditVenta.get('idTipoPago')?.value,
+  //   };
+  // }
   prepareVentaData() {
+    // Obtener el tipo de pago seleccionado
+    const idTipoPago = this.frmAddEditVenta.get('idTipoPago')?.value;
+
+    // Calcular el monto total basado en el tipo de pago
+    let montoTotal;
+    if (idTipoPago === 2) {
+      // Débito (5% de interés)
+      montoTotal = this.getTotalConInteres5();
+    } else if (idTipoPago === 3) {
+      // Crédito (10% de interés)
+      montoTotal = this.getTotalConInteres10();
+    } else {
+      // Otros tipos de pago, sin interés
+      montoTotal = this.getTotal();
+    }
+
     return {
-      idFactura: 0,
-      fechaHora: this.frmAddEditVenta.get('fechaHora')?.value || '',
-      totalFactura: this.getTotal(),
-      idsProductos: this.productosAgregados.map((p) =>
-        p.producto.idProducto.toString()
-      ),
-      cantidades: this.productosAgregados.map((p) => p.cantidad.toString()),
-      idPersona: null,
-      idTipoPago: this.frmAddEditVenta.get('idTipoPago')?.value,
+      montoTotal,
+      idTipoPago,
+      idUsuario: 1, // Usuario fijo, modificar según sea necesario
+      lstDetalleVentas: this.productosAgregados.map((p) => ({
+        cantidad: p.cantidad,
+        idProducto: p.producto.idProducto,
+      })),
     };
   }
-
-  // Método para registrar la venta
   registrarVenta() {
     this.loading = true;
     const ventaData = this.prepareVentaData();
 
-    // this.ventaService
-    //   .addData(
-    //     ventaData.idFactura,
-    //     ventaData.fechaHora,
-    //     ventaData.totalFactura,
-    //     ventaData.idsProductos,
-    //     ventaData.cantidades,
-    //     ventaData.idPersona,
-    //     ventaData.idTipoPago
-    //   )
-    //   .subscribe(
-    //     (response) => {
-    //       this.toastr.success('¡Venta cargada con éxito!');
-    //       this.frmAddEditVenta.reset();
-    //       this.productosAgregados = [];
-    //       location.reload();
+    console.log('Datos enviados:', ventaData);
 
-    //       this.loading = false;
-
-    //       // console.log('Venta registrada exitosamente', response);
-    //     },
-    //     (error) => {
-    //       // Maneja el error
-    //       console.error('Error al registrar la venta', error);
-    //     }
-    //   );
+    this.ventaService
+      .addData(
+        ventaData.montoTotal,
+        ventaData.idTipoPago,
+        ventaData.idUsuario,
+        ventaData.lstDetalleVentas
+      )
+      .subscribe(
+        (response) => {
+          console.log('Respuesta de la venta:', response);
+          this.toastr.success('¡Venta cargada con éxito!');
+          this.frmAddEditVenta.reset();
+          this.productosAgregados = [];
+          this.loading = false;
+          setTimeout(() => {
+            location.reload();
+          }, 200);
+        },
+        (error) => {
+          console.error('Error al registrar la venta:', error);
+          this.toastr.error('Ocurrió un error al registrar la venta.');
+          this.loading = false;
+        }
+      );
   }
 
   // GETS PARA OBTENER EL VALOR DE LOS CAMPOS DEL FORMULARIO

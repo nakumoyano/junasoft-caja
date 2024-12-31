@@ -92,9 +92,9 @@ export class AgregarProductoComponent implements OnInit {
             this.toastr.success('¡Producto cargado con éxito!');
             this.frmAddEditProducto.reset();
             this.loading = false;
-            // setTimeout(() => {
-            //   location.reload();
-            // }, 200);
+            setTimeout(() => {
+              location.reload();
+            }, 200);
           },
           error: (error: any) => {
             this.toastr.error(

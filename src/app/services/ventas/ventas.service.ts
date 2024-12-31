@@ -49,4 +49,42 @@ export class VentasService {
   deleteData(venta: Venta): Observable<Venta[]> {
     return this.http.delete<Venta[]>(this.API_URL_VENTAS + '/' + venta.idVenta);
   }
+
+  // addData(
+  //   idVenta: number,
+  //   totalFactura: number,
+  //   idTipoPago: string,
+  //   idUsuario: number | null,
+  //   lstDetalleVentas: string[]
+  // ): Observable<Venta> {
+  //   const formData: FormData = new FormData();
+
+  //   formData.append('idVenta', idVenta.toString());
+  //   formData.append('totalFactura', totalFactura.toString());
+  //   formData.append('lstDetalleVentas', lstDetalleVentas.join(',')); // Convertimos el array a una cadena separada por comas
+  //   // formData.append('cantidades', cantidades.join(',')); // Convertimos el array a una cadena separada por comas
+  //   formData.append(
+  //     'idUsuario',
+  //     idUsuario !== null ? idUsuario.toString() : ''
+  //   );
+
+  //   formData.append('idTipoPago', idTipoPago.toString());
+
+  //   return this.http.post<Venta>(this.API_URL_VENTAS, formData);
+  // }
+  addData(
+    montoTotal: number,
+    idTipoPago: number,
+    idUsuario: number,
+    lstDetalleVentas: { cantidad: number; idProducto: number }[]
+  ): Observable<Venta> {
+    const payload = {
+      montoTotal,
+      idTipoPago,
+      idUsuario,
+      lstDetalleVentas,
+    };
+
+    return this.http.post<Venta>(this.API_URL_VENTAS, payload);
+  }
 }
