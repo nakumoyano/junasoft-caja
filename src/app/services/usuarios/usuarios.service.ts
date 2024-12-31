@@ -7,7 +7,7 @@ import { Usuario } from 'src/app/models/usuario/usuario';
   providedIn: 'root',
 })
 export class UsuariosService {
-  private API_URL = 'https://apicaja.junasoft.com.junasoft.com/Usuarios';
+  private API_URL = 'https://apicaja.junasoft.com/Usuarios';
   private API_URL_POR_EMAIL = 'https://apicaja.junasoft.com/UsuariosPorEmail';
   private API_URL_UPDATE_PROFILE = 'https://apicaja.junasoft.com/CambioPerfil';
   private API_URL_REGISTRAR_ADMIN =
@@ -18,9 +18,10 @@ export class UsuariosService {
   constructor(private http: HttpClient) {}
 
   // MOSTRAR DATOS ADMIN
-  // getAllData(): Observable<Usuario[]> {
-  //   return this.http.get<Usuario[]>(this.API_URL_ADMINISTRADORES);
-  // }
+  getAllData(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.API_URL);
+  }
+
   // OBTENER DATOS DE ADMIN POR EMAIL
   getUserByEmail(): Observable<any> {
     const email = localStorage.getItem('email');

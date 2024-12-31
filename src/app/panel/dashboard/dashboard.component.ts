@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
     this.loading = true;
     this.ventasService.getAllFacturacionDelMes().subscribe(
       (data: any) => {
-        console.log('datos de ingresos', data);
+        // console.log('datos de ingresos', data);
         const ingresos = data;
 
         this.ingresos = ingresos; // Convierte ingresos a número si no lo es ya
@@ -166,7 +166,7 @@ export class DashboardComponent implements OnInit {
 
     this.cajaService.getFacturadoDelDia().subscribe(
       (data: any) => {
-        console.log('factuacion dia', data);
+        // console.log('factuacion dia', data);
         this.facturacionDelDia = data;
         this.loading = false;
       },

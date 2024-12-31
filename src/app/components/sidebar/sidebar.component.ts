@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UsuariosService } from 'src/app/services/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,8 +20,9 @@ export class SidebarComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router,
-    // private authService: AuthService,
-    private toastr: ToastrService
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private usuariosService: UsuariosService
   ) {}
 
   ngOnInit(): void {
@@ -50,24 +53,24 @@ export class SidebarComponent implements OnInit {
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        // this.authService.logout().subscribe(
-        //   (resultado: any) => {
-        //     if (resultado && resultado.isExitoso) {
-        //       // console.log('resultado logout', resultado);
-        //       this.toastr.success('Sesión cerrada exitosamente');
-        //       this.router.navigate(['/admin/login']); // O a la página que desees después del logout
-        //     } else {
-        //       // Manejar la respuesta del servidor si no hay un resultado específico
-        //       this.toastr.warning('No se pudo cerrar la sesión');
-        //     }
-        //   },
-        //   (error) => {
-        //     // console.error(error);
-        //     this.toastr.error(
-        //       'Error al cerrar sesión. Por favor, inténtelo de nuevo.'
-        //     );
-        //   }
-        // );
+        this.authService.logout().subscribe(
+          (resultado: any) => {
+            if (resultado && resultado.isExitoso) {
+              // console.log('resultado logout', resultado);
+              this.toastr.success('Sesión cerrada exitosamente');
+              this.router.navigate(['/admin/login']); // O a la página que desees después del logout
+            } else {
+              // Manejar la respuesta del servidor si no hay un resultado específico
+              this.toastr.warning('No se pudo cerrar la sesión');
+            }
+          },
+          (error) => {
+            // console.error(error);
+            this.toastr.error(
+              'Error al cerrar sesión. Por favor, inténtelo de nuevo.'
+            );
+          }
+        );
       },
       reject: () => {
         this.messageService.add({
@@ -93,28 +96,28 @@ export class SidebarComponent implements OnInit {
   }
 
   logout() {
-    // this.authService.logout().subscribe(
-    //   () => {
-    //     this.toastr.success('Sesión cerrada exitosamente');
-    //     this.router.navigate(['/admin/login']);
-    //   },
-    //   (error) => {
-    //     this.toastr.error(
-    //       'Error al cerrar sesión. Por favor, inténtelo de nuevo.'
-    //     );
-    //   }
-    // );
+    this.authService.logout().subscribe(
+      () => {
+        this.toastr.success('Sesión cerrada exitosamente');
+        this.router.navigate(['/admin/login']);
+      },
+      (error) => {
+        this.toastr.error(
+          'Error al cerrar sesión. Por favor, inténtelo de nuevo.'
+        );
+      }
+    );
   }
 
   // f**************************************** FUNCION PARA OBTENER DATOS USUARIO ********************************
   obtenerDatos() {
-    // this.authService.getUserByEmail().subscribe(
-    //   (user: any) => {
-    //     // console.log('respuesta del usuario por email sidebar', user);
-    //     this.user = user;
-    //   },
-    //   (error) => {}
-    // );
+    this.usuariosService.getUserByEmail().subscribe(
+      (user: any) => {
+        // console.log('respuesta del usuario por email sidebar', user);
+        this.user = user;
+      },
+      (error) => {}
+    );
   }
 
   // d*************************************** FUNCINO PARA ACTIVA EL LINK ****************************

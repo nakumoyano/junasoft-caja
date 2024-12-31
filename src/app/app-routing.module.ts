@@ -11,6 +11,8 @@ import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/e
 import { LoginComponent } from './auth/login/login.component';
 import { CargarVentaComponent } from './panel/ventas/cargar-venta/cargar-venta.component';
 import { ListadoDeVentasComponent } from './panel/ventas/listado-de-ventas/listado-de-ventas.component';
+import { ListadoDeAdministradoresComponent } from './panel/administradores/listado-de-administradores/listado-de-administradores.component';
+import { ConfiguracionComponent } from './panel/configuracion/configuracion.component';
 
 const routes: Routes = [
   // AUTH
@@ -64,6 +66,11 @@ const routes: Routes = [
     component: CrearAdministradorComponent,
     data: { title: 'Registrar Administrador | Junasoft - Caja' },
   },
+  {
+    path: 'admin/administradores/listado-de-administradores',
+    component: ListadoDeAdministradoresComponent,
+    data: { title: 'Listado de Administradores | Junasoft - Caja' },
+  },
   // CAJA
   {
     path: 'admin/caja',
@@ -90,6 +97,12 @@ const routes: Routes = [
     path: 'admin/ventas/listado-de-ventas',
     component: ListadoDeVentasComponent,
     data: { title: 'Listado de Ventas | Junasoft - Caja' },
+  },
+  // VENTAS
+  {
+    path: 'admin/configuracion',
+    component: ConfiguracionComponent,
+    data: { title: 'Configuración | Junasoft - Caja' },
   },
 ];
 

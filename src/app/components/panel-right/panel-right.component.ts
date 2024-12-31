@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Caja } from 'src/app/models/caja/caja';
 import { CajaService } from 'src/app/services/caja/caja.service';
+import { UsuariosService } from 'src/app/services/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-panel-right',
@@ -12,7 +13,8 @@ export class PanelRightComponent implements OnInit {
   user: any;
 
   constructor(
-    private cajaService: CajaService // private authService: AuthService
+    private cajaService: CajaService, // private authService: AuthService,
+    private usuariosService: UsuariosService
   ) {}
 
   ngOnInit(): void {
@@ -22,15 +24,15 @@ export class PanelRightComponent implements OnInit {
 
   // f**************************************** FUNCION PARA OBTENER DATOS USUARIO ********************************
   obtenerDatos() {
-    // this.authService.getUserByEmail().subscribe(
-    //   (response: any) => {
-    //     // console.log('respuesta del usuario panel right', response);
-    //     this.user = response;
-    //   },
-    //   (error) => {
-    //     console.error('Error al obtener los datos del usuario', error);
-    //   }
-    // );
+    this.usuariosService.getUserByEmail().subscribe(
+      (response: any) => {
+        // console.log('respuesta del usuario panel right', response);
+        this.user = response;
+      },
+      (error) => {
+        console.error('Error al obtener los datos del usuario', error);
+      }
+    );
   }
 
   // f**************************************** FUNCION PARA OBTENER ESTADO CAJA ********************************
@@ -40,7 +42,7 @@ export class PanelRightComponent implements OnInit {
   obtenerEstadoCaja() {
     this.cajaService.getEstadoCaja().subscribe(
       (data: any) => {
-        console.log('Estado de la caja:', data);
+        // console.log('Estado de la caja:', data);
         this.estadoCaja = data.estado; // Asignar el estado
         this.saldoCaja = data.saldo; // Asignar el saldo
       },

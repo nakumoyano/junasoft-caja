@@ -32,6 +32,8 @@ import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/e
 import { LoginComponent } from './auth/login/login.component';
 import { CargarVentaComponent } from './panel/ventas/cargar-venta/cargar-venta.component';
 import { ListadoDeVentasComponent } from './panel/ventas/listado-de-ventas/listado-de-ventas.component';
+import { ListadoDeAdministradoresComponent } from './panel/administradores/listado-de-administradores/listado-de-administradores.component';
+import { ConfiguracionComponent } from './panel/configuracion/configuracion.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { ListadoDeVentasComponent } from './panel/ventas/listado-de-ventas/lista
     LoginComponent,
     CargarVentaComponent,
     ListadoDeVentasComponent,
+    ListadoDeAdministradoresComponent,
+    ConfiguracionComponent,
   ],
   imports: [
     BrowserModule,
