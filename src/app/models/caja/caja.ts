@@ -2,12 +2,12 @@ import { TipoMovimiento } from '../tipo-movimiento/tipo-movimiento';
 import { Usuario } from '../usuario/usuario';
 
 export class Caja {
-  idCaja: number;
+  idMovimiento: number;
   idTipoMovimiento?: number;
-  tipoMovimiento?: TipoMovimiento;
+  tiposMovimientosCaja?: TipoMovimiento;
   descripcion: string;
   monto: number;
-  fechaMovimiento?: string;
+  fechaHora?: string;
   idUsuario: number;
   usuario?: Usuario;
 }

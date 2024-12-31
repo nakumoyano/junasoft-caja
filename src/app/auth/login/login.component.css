@@ -1,0 +1,88 @@
+.bg-image-vertical {
+  position: relative;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: auto 100%;
+}
+
+@media (min-width: 1025px) {
+  .h-custom-2 {
+    height: 100%;
+  }
+}
+
+.bg {
+  background-image: url("https://inmobiliarialolallar.com.ar/wp-content/uploads/2023/02/lola-1024x694.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.img {
+  width: 120px;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  width: 60%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.img-left {
+  background-color: rgb(0, 68, 255);
+}
+
+.section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 0px 80px 0px 80px;
+}
+
+.text {
+  color: black;
+}
+
+.i-eye {
+  color: black;
+  cursor: pointer;
+  right: 25px;
+  position: absolute;
+  padding-top: 12px;
+}
+
+.bg-form {
+  background-image: url("https://imagenes.elpais.com/resizer/v2/MBAX3IRTQU5D3JD6N5YGCY6K6U.jpg?auth=d2b458b22f84e9c8a89112db69811945987f71682ef33baaadb3593d3a55fd8d&width=1960&height=1103&smart=true");
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.bg-form::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: inherit;
+  background-position: inherit;
+  background-size: inherit;
+  filter: blur(6px);
+  z-index: -2;
+}
+
+.bg-form::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(121, 2, 2, 0.338);
+  z-index: -1;
+}

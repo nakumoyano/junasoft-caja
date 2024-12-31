@@ -27,13 +27,19 @@ export class CategoriasService {
   }
 
   // EDITAR DATOS
-  updateData(idCategoria: number, nombre: string): Observable<Categoria> {
-    const formData: FormData = new FormData();
+  // updateData(idCategoria: number, nombre: string): Observable<Categoria> {
+  //   const formData: FormData = new FormData();
 
-    formData.append('idCategoria', idCategoria.toString());
-    formData.append('nombre', nombre);
+  //   formData.append('idCategoria', idCategoria.toString());
+  //   formData.append('nombre', nombre);
 
-    return this.http.put<Categoria>(`${this.API_URL}/${idCategoria}`, formData);
+  //   return this.http.put<Categoria>(`${this.API_URL}/${idCategoria}`, formData);
+  // }
+  updateData(categoria: Categoria): Observable<Categoria> {
+    return this.http.put<Categoria>(
+      this.API_URL + '/' + categoria.idCategoria,
+      categoria
+    );
   }
 
   // GET BY ID

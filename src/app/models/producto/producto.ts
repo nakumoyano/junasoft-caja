@@ -1,4 +1,5 @@
 import { Categoria } from '../categoria/categoria';
+import { UnidadMedida } from '../unidad-medida/unidad-medida';
 
 export class Producto {
   idProducto: number;
@@ -7,4 +8,6 @@ export class Producto {
   precioUnitario: number;
   idCategoria: number;
   categoria?: Categoria;
+  idUnidadMedida: number;
+  unidadMedida?: UnidadMedida;
 }

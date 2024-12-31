@@ -22,15 +22,20 @@ export class ProductosService {
     nombre: string,
     sku: string,
     precioUnitario: number,
-    idCategoria: number
+    idCategoria: number,
+    idUnidadMedida: number
   ): Observable<Producto> {
     const formData: FormData = new FormData();
 
     formData.append('idProducto', idProducto.toString());
     formData.append('nombre', nombre);
-    formData.append('sku', sku);
+    // formData.append('sku', sku.toString());
     formData.append('idCategoria', idCategoria.toString());
+    formData.append('idUnidadMedida', idUnidadMedida.toString());
 
+    if (sku !== null && sku !== undefined) {
+      formData.append('sku', sku.toString());
+    }
     if (precioUnitario !== null && precioUnitario !== undefined) {
       formData.append('precioUnitario', precioUnitario.toString());
     }
@@ -39,25 +44,33 @@ export class ProductosService {
   }
 
   // EDITAR DATOS
-  updateData(
-    idProducto: number,
-    nombre: string,
-    sku: string,
-    precioUnitario: number,
-    idCategoria: number
-  ): Observable<Producto> {
-    const formData: FormData = new FormData();
+  // updateData(
+  //   idProducto: number,
+  //   nombre: string,
+  //   sku: string,
+  //   precioUnitario: number,
+  //   idCategoria: number,
+  //   idUnidadMedida: number
+  // ): Observable<Producto> {
+  //   const formData: FormData = new FormData();
 
-    formData.append('idProducto', idProducto.toString());
-    formData.append('nombre', nombre);
-    formData.append('sku', sku);
-    formData.append('idCategoria', idCategoria.toString());
+  //   formData.append('idProducto', idProducto.toString());
+  //   formData.append('nombre', nombre);
+  //   formData.append('sku', sku);
+  //   formData.append('idCategoria', idCategoria.toString());
+  //   formData.append('idUnidadMedida', idUnidadMedida.toString());
 
-    if (precioUnitario !== null && precioUnitario !== undefined) {
-      formData.append('precioUnitario', precioUnitario.toString());
-    }
+  //   if (precioUnitario !== null && precioUnitario !== undefined) {
+  //     formData.append('precioUnitario', precioUnitario.toString());
+  //   }
 
-    return this.http.put<Producto>(`${this.API_URL}/${idProducto}`, formData);
+  //   return this.http.put<Producto>(`${this.API_URL}/${idProducto}`, formData);
+  // }
+  updateData(producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(
+      `${this.API_URL}/${producto.idProducto}`,
+      producto
+    );
   }
 
   // GET BY ID

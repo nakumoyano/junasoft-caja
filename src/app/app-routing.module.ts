@@ -8,8 +8,18 @@ import { ListadoDeProductosComponent } from './panel/productos/listado-de-produc
 import { CrearAdministradorComponent } from './panel/administradores/crear-administrador/crear-administrador.component';
 import { CajaComponent } from './panel/caja/caja/caja.component';
 import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/editar-apertura-caja.component';
+import { LoginComponent } from './auth/login/login.component';
+import { CargarVentaComponent } from './panel/ventas/cargar-venta/cargar-venta.component';
+import { ListadoDeVentasComponent } from './panel/ventas/listado-de-ventas/listado-de-ventas.component';
 
 const routes: Routes = [
+  // AUTH
+  { path: '', redirectTo: '/admin/login', pathMatch: 'full' },
+  {
+    path: 'admin/login',
+    component: LoginComponent,
+    data: { title: 'Login | Junasoft - Caja' },
+  },
   // DASHBOARD
   {
     path: 'admin/dashboard',
@@ -64,6 +74,22 @@ const routes: Routes = [
     path: 'admin/caja/editar-caja/:id',
     component: EditarAperturaCajaComponent,
     data: { title: 'Caja - Editar caja' },
+  },
+  // VENTAS
+  {
+    path: 'admin/ventas/cargar-venta',
+    component: CargarVentaComponent,
+    data: { title: 'Cargar Venta | Junasoft - Caja' },
+  },
+  {
+    path: 'admin/ventas/editar-venta/:id',
+    component: CargarVentaComponent,
+    data: { title: 'Editar Venta | Junasoft - Caja' },
+  },
+  {
+    path: 'admin/ventas/listado-de-ventas',
+    component: ListadoDeVentasComponent,
+    data: { title: 'Listado de Ventas | Junasoft - Caja' },
   },
 ];
 

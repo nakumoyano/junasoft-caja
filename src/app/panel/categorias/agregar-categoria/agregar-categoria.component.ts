@@ -99,13 +99,10 @@ export class AgregarCategoriaComponent implements OnInit {
     if (this.frmAddEditCategoria.valid) {
       this.loading = true;
 
-      const formData = new FormData(); // Usamos FormData para enviar los archivos
-
-      // Agregar los valores del formulario al FormData
-      const formValues = this.frmAddEditCategoria.value;
-
-      formData.append('idCategoria', formValues.idCategoria);
-      formData.append('nombre', formValues.nombre);
+      const body = {
+        idCategoria: this.frmAddEditCategoria.value.idCategoria,
+        nombre: this.frmAddEditCategoria.value.nombre,
+      };
 
       Swal.fire({
         title: '¿Estás seguro que deseas editar este categoría?',
@@ -117,35 +114,33 @@ export class AgregarCategoriaComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.subscription.add(
-            this.categoriasService
-              .updateData(formValues.idCategoria, formValues.nombre)
-              .subscribe({
-                next: (response: any) => {
-                  console.log('respuesta editar', response);
-                  Swal.fire(
-                    '¡Editado!',
-                    '¡La categoría se ha editado correctamente!',
-                    'success'
-                  );
-                  this.loading = false;
-                  setTimeout(() => {
-                    this.router
-                      .navigate(['/admin/categorias/listado-de-categorias'])
-                      .then(() => {
-                        setTimeout(() => {
-                          location.reload();
-                        }, 10);
-                      });
-                  }, 1000);
-                },
-                error: (error: any) => {
-                  Swal.fire(
-                    'Error!',
-                    'Ha ocurrido un error al intentar editar la categoria. Por favor, inténtelo de nuevo más tarde.',
-                    'error'
-                  );
-                },
-              })
+            this.categoriasService.updateData(body).subscribe({
+              next: (response: any) => {
+                console.log('respuesta editar', response);
+                Swal.fire(
+                  '¡Editado!',
+                  '¡La categoría se ha editado correctamente!',
+                  'success'
+                );
+                this.loading = false;
+                setTimeout(() => {
+                  this.router
+                    .navigate(['/admin/categorias/listado-de-categorias'])
+                    .then(() => {
+                      setTimeout(() => {
+                        location.reload();
+                      }, 10);
+                    });
+                }, 1000);
+              },
+              error: (error: any) => {
+                Swal.fire(
+                  'Error!',
+                  'Ha ocurrido un error al intentar editar la categoria. Por favor, inténtelo de nuevo más tarde.',
+                  'error'
+                );
+              },
+            })
           );
         }
       });

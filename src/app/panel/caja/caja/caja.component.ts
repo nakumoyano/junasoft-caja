@@ -5,8 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { Caja } from 'src/app/models/caja/caja';
 import { Producto } from 'src/app/models/producto/producto';
+import { Venta } from 'src/app/models/venta/venta';
 import { CajaService } from 'src/app/services/caja/caja.service';
 import { ProductosService } from 'src/app/services/productos/productos.service';
+import { VentasService } from 'src/app/services/ventas/ventas.service';
 
 @Component({
   selector: 'app-caja',
@@ -34,6 +36,8 @@ export class CajaComponent implements OnInit {
 
   activeTab: string = ''; // Inicializa con el tab por defecto
 
+  arr_ventas = [];
+
   totalFacturadoMes: number = 0;
   totalFacturadoDia: number = 0;
 
@@ -43,10 +47,11 @@ export class CajaComponent implements OnInit {
   frmAddEditDiaSeleccionado: FormGroup;
   frmAddEditRetiro: FormGroup;
 
-  movimientos: any[] = [];
+  movimientos: Caja[] = [];
+  ventas: Venta[] = [];
 
   constructor(
-    // private ventasService: VentasService,
+    private ventasService: VentasService,
     private productoService: ProductosService,
     private toastr: ToastrService,
     // private modosPagosService: ModoPagosService,
@@ -63,6 +68,9 @@ export class CajaComponent implements OnInit {
     this.getMovimientos();
     this.createForm();
     this.activeTab = 'caja';
+
+    this.getVentas();
+    this.getFacturacionDia();
   }
 
   createForm() {
@@ -73,15 +81,17 @@ export class CajaComponent implements OnInit {
 
     this.frmAddEditAperturaCaja = this.formBuilder.group({
       monto: ['', Validators.required],
+      descripcion: ['', Validators.required],
     });
 
     this.frmAddEditRetiro = this.formBuilder.group({
-      montoRetiro: ['', Validators.required],
-      motivoRetiro: ['', Validators.required],
+      monto: ['', Validators.required],
+      descripcion: ['', Validators.required],
     });
 
     this.frmAddEditCierreCaja = this.formBuilder.group({
-      montoCierre: ['', Validators.required],
+      monto: ['', Validators.required],
+      descripcion: ['', Validators.required],
     });
 
     this.frmAddEditDiaSeleccionado = this.formBuilder.group({
@@ -234,27 +244,28 @@ export class CajaComponent implements OnInit {
     this.activeTab = tab;
   }
 
+  // f*************************************** FUNCIONES DE APERTUR, RETIRO Y CIERRE DE CAJA ****************************
   idUsuario = 0;
   cargarAperturaCaja() {
     const { monto, descripcion } = this.frmAddEditAperturaCaja.value;
 
     if (this.frmAddEditAperturaCaja.valid) {
       this.loading = true;
-      this.cajaService
-        .addDataAperturaCaja(monto, this.idUsuario, descripcion)
-        .subscribe({
-          next: () => {
-            this.toastr.success('¡Apertura de caja cargada con éxito!');
-            this.loading = false;
+      this.cajaService.addDataAperturaCaja(monto, 1, descripcion).subscribe({
+        next: (data) => {
+          console.log(data);
+          this.toastr.success('¡Apertura de caja realizado con éxito!');
+          this.loading = false;
 
-            location.reload();
-          },
-          error: (error: any) => {
-            this.toastr.error(
-              'Ha ocurrido un error. Espere e intente nuevamente.'
-            );
-          },
-        });
+          // location.reload();
+        },
+        error: (error: any) => {
+          this.toastr.error(
+            'Ha ocurrido un error. Espere e intente nuevamente.',
+            error
+          );
+        },
+      });
     } else {
       Object.values(this.frmAddEditAperturaCaja.controls).forEach((control) => {
         control.markAsTouched();
@@ -268,21 +279,20 @@ export class CajaComponent implements OnInit {
 
     if (this.frmAddEditRetiro.valid) {
       this.loading = true;
-      this.cajaService
-        .addDataRetiroCaja(monto, this.idUsuario, descripcion)
-        .subscribe({
-          next: () => {
-            this.toastr.success('Retiro de caja cargado con éxito!');
-            this.loading = false;
+      this.cajaService.addDataRetiroCaja(monto, 1, descripcion).subscribe({
+        next: () => {
+          this.toastr.success('Retiro de caja cargado con éxito!');
+          this.loading = false;
 
-            location.reload();
-          },
-          error: (error: any) => {
-            this.toastr.error(
-              'Ha ocurrido un error. Espere e intente nuevamente.'
-            );
-          },
-        });
+          // location.reload();
+        },
+        error: (error: any) => {
+          this.toastr.error(
+            'Ha ocurrido un error. Espere e intente nuevamente.',
+            error
+          );
+        },
+      });
     } else {
       Object.values(this.frmAddEditRetiro.controls).forEach((control) => {
         control.markAsTouched();
@@ -296,21 +306,28 @@ export class CajaComponent implements OnInit {
 
     if (this.frmAddEditCierreCaja.valid) {
       this.loading = true;
-      this.cajaService
-        .addDataCierreCaja(monto, this.idUsuario, descripcion)
-        .subscribe({
-          next: () => {
-            this.toastr.success('Cierre de caja cargado con éxito!');
-            this.loading = false;
+      this.cajaService.addDataCierreCaja(monto, 1, descripcion).subscribe({
+        next: () => {
+          this.toastr.success('¡Cierre de caja cargado con éxito!');
+          this.loading = false;
 
-            location.reload();
-          },
-          error: (error: any) => {
-            this.toastr.error(
-              'Ha ocurrido un error. Espere e intente nuevamente.'
-            );
-          },
-        });
+          // location.reload();
+        },
+        error: (error: any) => {
+          // Accede a error.error.errorMessages si existe
+          const errorMessages = error?.error?.errorMessages;
+          const errorMessage =
+            Array.isArray(errorMessages) && errorMessages.length > 0
+              ? errorMessages[0] // Toma el primer mensaje del array
+              : 'Ha ocurrido un error inesperado.'; // Mensaje genérico si no hay mensajes
+
+          // Muestra el mensaje específico con Toastr
+          this.toastr.error(errorMessage, 'Error');
+
+          // Opcional: Muestra detalles del error en la consola para depuración
+          console.error('Error al intentar cerrar caja:', error);
+        },
+      });
     } else {
       Object.values(this.frmAddEditCierreCaja.controls).forEach((control) => {
         control.markAsTouched();
@@ -319,6 +336,7 @@ export class CajaComponent implements OnInit {
     }
   }
 
+  // f*************************************** FUNCION PARA OBTENER MOVIMIENTOS DEL DIA ****************************
   getMovimientos() {
     this.loading = true;
 
@@ -377,5 +395,37 @@ export class CajaComponent implements OnInit {
         }
       );
     }
+  }
+
+  getVentas() {
+    this.loading = true;
+
+    this.ventasService.getAllData().subscribe(
+      (data: any) => {
+        this.ventas = data.resultado;
+        console.log('ventas', this.ventas);
+        this.loading = false;
+        this.totalRecordsMovimientos = this.ventas.length;
+      },
+      (error) => {
+        console.error('Error al obtener los ventas', error);
+      }
+    );
+  }
+
+  facturacionDelDia = '';
+  getFacturacionDia() {
+    this.loading = true;
+
+    this.cajaService.getFacturadoDelDia().subscribe(
+      (data: any) => {
+        console.log('factuacion dia', data);
+        this.facturacionDelDia = data;
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error al obtener los ventas', error);
+      }
+    );
   }
 }

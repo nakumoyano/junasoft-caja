@@ -89,6 +89,7 @@
             #dt
             dataKey="id"
             [rows]="10"
+            [value]="ventas"
             [loading]="loading"
             [lazy]="false"
             [showCurrentPageReport]="true"
@@ -105,53 +106,32 @@
             currentPageReportTemplate="Mostrando {first} a {last} de {{
               totalRecords
             }} elementos"
-            [globalFilterFields]="['nombresProductos', 'modoPago.modoPago']"
+            [globalFilterFields]="['nombresProductos', 'tiposPagos.tipoPago']"
           >
-            <ng-template pTemplate="header">
+            <!-- <ng-template pTemplate="header">
               <tr>
-                <th scope="col" class="px-6 py-3">FECHA</th>
-                <th scope="col" class="px-6 py-3">PRODUCTOS</th>
-                <th scope="col" class="px-6 py-3">CANTIDADES</th>
                 <th scope="col" class="px-6 py-3">TOTAL DE FACTURA</th>
                 <th scope="col" class="px-6 py-3">MODO DE PAGO</th>
-                <th scope="col" class="px-6 py-3">ACCIÓN</th>
               </tr>
-            </ng-template>
+            </ng-template> -->
             <ng-template pTemplate="body" let-venta>
-              <tr class="bg-white border-b hover:bg-gray-50">
-                <td class="px-6 py-4">
-                  {{ venta.fechaHora | date : "dd/MM/YYYY" }}
-                </td>
-                <td class="px-6 py-4">
-                  <ng-container
-                    *ngIf="
-                      venta.nombresProductos &&
-                      venta.nombresProductos.length > 0
-                    "
-                  >
-                    {{ venta.nombresProductos.join(", ") }}
-                  </ng-container>
-                </td>
-                <td class="px-6 py-4">
-                  {{ venta.cantidades }}
-                </td>
-                <td class="px-6 py-4">{{ venta.totalFactura | currency }}</td>
-                <td class="px-6 py-4">{{ venta.modoPago?.modoPago }}</td>
-                <td class="px-6 py-4 flex gap-4">
-                  <div class="flex text-xl">
-                    <!-- <app-eliminar-elemento
-                      [elemento]="venta"
-                      (eliminado)="eliminar($event)"
-                    ></app-eliminar-elemento> -->
-                    <button
-                      class="text-black hover:bg-[#d4d2d2af] px-2 rounded"
-                      (click)="showDialog(venta)"
-                      title="Ver detalle"
-                    >
-                      <i class="fa-solid fa-ellipsis-vertical"></i>
-                    </button>
-                  </div>
-                </td>
+              <tr
+                class="bg-white border hover:bg-gray-50 flex justify-between p-4 text-black"
+              >
+                <div class="flex gap-4 items-center">
+                  <i
+                    class="fa-solid fa-hand-holding-dollar border border-black rounded-full p-2"
+                  ></i>
+                  <p>{{ venta.tipoPagos?.tipoPago }}</p>
+                </div>
+                <div class="flex flex-col">
+                  <p class="text-green-500 font-bold">
+                    + {{ venta.montoTotal | currency }}
+                  </p>
+                  <p class="text-sm text-slate-400">
+                    {{ venta.fechaHora | date : "HH:mm:ss" }}
+                  </p>
+                </div>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
@@ -175,10 +155,10 @@
               Total facturado el día de hoy:
             </h4>
             <span class="text-gray-500 font-medium">{{
-              totalFacturas | currency
+              facturacionDelDia | currency
             }}</span>
           </div>
-          <a routerLink="/admin/ventas/nueva-venta">
+          <a routerLink="/admin/ventas/cargar-venta">
             <button
               class="text-blue-600 font-bold px-4 py-2 hover:bg-blue-50 rounded-lg"
             >
@@ -330,41 +310,38 @@
             <ng-template pTemplate="header">
               <tr>
                 <th scope="col" class="px-6 py-3">ACCIÓN</th>
-                <th scope="col" class="px-6 py-3">FECHA</th>
-                <th scope="col" class="px-6 py-3">TIPO DE OPERACIÓN</th>
                 <th scope="col" class="px-6 py-3">MONTO</th>
                 <th scope="col" class="px-6 py-3">MOTIVO</th>
+                <th scope="col" class="px-6 py-3">TIPO DE OPERACIÓN</th>
+                <th scope="col" class="px-6 py-3">FECHA</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-m>
               <tr class="bg-white border-b hover:bg-gray-50">
-                <td class="px-6 py-4 flex gap-4">
-                  <div class="flex text-xl">
+                <td class="px-6 py-4 flex gap-4 border-r">
+                  <div class="flex text-xl gap-2">
                     <button
-                      class="text-black hover:bg-[#d4d2d2af] px-2 rounded"
+                      class="px-2 py-1 h-8 bg-blue-600 hover:bg-blue-700 rounded text-white items-center flex"
                       title="Editar Movimiento"
                       [routerLink]="['/admin/caja/editar-caja', m.idMovimiento]"
                     >
-                      <i
-                        class="fa-solid fa-pen-to-square text-gray-600 0 p-2 rounded-lg hover:cursor-pointer"
-                      ></i>
+                      <i class="fa-solid fa-pen text-sm"></i>
                     </button>
-                    <!-- <app-eliminar-elemento
+                    <app-boton-eliminar
                       [elemento]="m"
                       (eliminado)="eliminarMovimiento($event)"
-                    ></app-eliminar-elemento> -->
+                    ></app-boton-eliminar>
                   </div>
-                </td>
-                <td class="px-6 py-4">
-                  {{ m.fechaMovimiento | date : "dd/MM/YYYY" }}
-                </td>
-
-                <td class="px-6 py-4">
-                  {{ m.tiposOperaciones.tipoOperacion }}
                 </td>
                 <td class="px-6 py-4">{{ m.monto | currency }}</td>
                 <td class="px-6 py-4">
-                  {{ m.motivo || "No hay motivo registrado" }}
+                  {{ m.descripcion || "No hay motivo registrado" }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ m.tiposMovimientosCaja.tipoMovimiento }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ m.fechaHora | date : "dd/MM/YYYY" }}
                 </td>
               </tr>
             </ng-template>
@@ -455,31 +432,31 @@
               <tr class="bg-white border-b hover:bg-gray-50">
                 <td class="px-6 py-4 flex gap-4">
                   <div class="flex text-xl">
+                    <!-- BOTON EDITAR -->
                     <button
-                      class="text-black hover:bg-[#d4d2d2af] px-2 rounded"
-                      title="Editar Movimiento"
+                      class="px-2 py-1 h-8 bg-blue-600 hover:bg-blue-700 rounded text-white"
+                      title="Editar"
                       [routerLink]="['/admin/caja/editar-caja', m.idMovimiento]"
                     >
-                      <i
-                        class="fa-solid fa-pen-to-square text-gray-600 hover:bg-gray-100 p-2 rounded-lg hover:cursor-pointer"
-                      ></i>
+                      <i class="fa-solid fa-pen"></i>
                     </button>
-                    <!-- <app-eliminar-elemento
+                    <!-- BOTON ELIMINAR -->
+                    <app-boton-eliminar
                       [elemento]="m"
                       (eliminado)="eliminarMovimiento($event)"
-                    ></app-eliminar-elemento> -->
+                    >
+                    </app-boton-eliminar>
                   </div>
                 </td>
                 <td class="px-6 py-4">
-                  {{ m.fechaMovimiento | date : "dd/MM/YYYY" }}
-                </td>
-
-                <td class="px-6 py-4">
-                  {{ m.tiposOperaciones.tipoOperacion }}
+                  {{ m.fechaHora | date : "dd/MM/YYYY" }}
                 </td>
                 <td class="px-6 py-4">{{ m.monto | currency }}</td>
                 <td class="px-6 py-4">
-                  {{ m.motivo || "No hay motivo registrado" }}
+                  {{ m.descripcion || "No hay motivo registrado" }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ m.tiposMovimientosCaja.tipoMovimiento }}
                 </td>
               </tr>
             </ng-template>
@@ -533,6 +510,20 @@
                     formControlName="monto"
                   />
                 </div>
+                <div class="flex flex-col mt-4">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="descripcion"
+                    >Motivo de retiro</label
+                  >
+                  <input
+                    type="text"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Motivo del retiro de caja"
+                    id="descripcion"
+                    formControlName="descripcion"
+                  />
+                </div>
               </div>
               <div class="flex">
                 <button
@@ -567,29 +558,29 @@
                 <div class="flex flex-col">
                   <label
                     class="block mb-2 text-sm font-medium text-gray-900"
-                    for="montoRetiro"
+                    for="monto"
                     >Monto de retiro</label
                   >
                   <input
                     type="number"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                     placeholder="Monto del retiro de caja"
-                    formControlName="montoRetiro"
-                    id="montoRetiro"
+                    formControlName="monto"
+                    id="monto"
                   />
                 </div>
                 <div class="flex flex-col mt-4">
                   <label
                     class="block mb-2 text-sm font-medium text-gray-900"
-                    for="motivoRetiro"
+                    for="descripcion"
                     >Motivo de retiro</label
                   >
                   <input
                     type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                     placeholder="Motivo del retiro de caja"
-                    id="motivoRetiro"
-                    formControlName="motivoRetiro"
+                    id="descripcion"
+                    formControlName="descripcion"
                   />
                 </div>
               </div>
@@ -626,15 +617,29 @@
                 <div class="flex flex-col">
                   <label
                     class="block mb-2 text-sm font-medium text-gray-900"
-                    for="montoCierre"
+                    for="monto"
                     >Monto de cierre</label
                   >
                   <input
                     type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                     placeholder="Monto del cierre de caja"
-                    formControlName="montoCierre"
-                    id="montoCierre"
+                    formControlName="monto"
+                    id="monto"
+                  />
+                </div>
+                <div class="flex flex-col mt-4">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="descripcion"
+                    >Motivo de retiro</label
+                  >
+                  <input
+                    type="text"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Motivo del retiro de caja"
+                    id="descripcion"
+                    formControlName="descripcion"
                   />
                 </div>
               </div>

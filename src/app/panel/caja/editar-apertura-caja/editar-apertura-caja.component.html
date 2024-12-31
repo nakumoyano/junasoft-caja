@@ -77,13 +77,13 @@
                 type="text"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                 placeholder="Motivo"
-                formControlName="motivo"
-                id="motivo"
+                formControlName="descripcion"
+                id="descripcion"
                 [class.invalido]="
-                  controlMotivo.touched && controlMotivo.invalid
+                  controlDescripcion.touched && controlDescripcion.invalid
                 "
                 [ngClass]="
-                  controlMotivo.touched && controlMotivo.invalid
+                  controlDescripcion.touched && controlDescripcion.invalid
                     ? 'alert placeholder:text-sm '
                     : 'border px-3 py-2 rounded-lg focus:outline-none text-black placeholder:text-sm'
                 "
@@ -91,9 +91,9 @@
               <small
                 class="alert-panel alert-danger"
                 role="alert"
-                *ngIf="controlMotivo.touched && controlMotivo.invalid"
+                *ngIf="controlDescripcion.touched && controlDescripcion.invalid"
               >
-                El motivo es requerido.
+                La descripción es requerida.
               </small>
             </div>
             <!-- MONTO -->
@@ -127,21 +127,21 @@
             <!-- TIPO OPREACION -->
             <div class="flex flex-col">
               <label
-                for="idTipoOperacion"
+                for="idTipoMovimiento"
                 class="block mb-2 text-sm font-medium text-gray-900"
                 >Tipo de opreación</label
               >
               <p-dropdown
                 [options]="tipoMovimientos"
-                [(ngModel)]="selectedTipoOperacion"
-                optionLabel="tipoOperacion"
+                [(ngModel)]="selectedTipoMovimiento"
+                optionLabel="tipoMovimiento"
                 [filter]="true"
                 id="idPersona"
-                filterBy="tipoOperacion"
-                optionValue="idTipoOperacion"
+                filterBy="tipoMovimiento"
+                optionValue="idTipoMovimiento"
                 [showClear]="true"
                 placeholder="Seleccionar tipo de operación"
-                formControlName="idTipoOperacion"
+                formControlName="idTipoMovimiento"
                 appendTo="body"
                 [style]="{
                   width: '100%',
@@ -163,7 +163,7 @@
               >
                 <ng-template let-tp pTemplate="item">
                   <div class="tp-item">
-                    <div>{{ tp.tipoOperacion }}</div>
+                    <div>{{ tp.tipoMovimiento }}</div>
                   </div>
                 </ng-template>
               </p-dropdown>
@@ -187,7 +187,7 @@
               <input
                 type="date"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                formControlName="fechaMovimiento"
+                formControlName="fechaHora"
                 id="fecha"
                 [class.invalido]="controlFecha.touched && controlFecha.invalid"
                 [ngClass]="
@@ -213,6 +213,7 @@
               type="submit"
               class="text-white lg:w-auto md:w-auto mt-2 w-full bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               *ngIf="isEdit && !loading"
+              (click)="editarMovimientoCaja()"
             >
               <i class="fa-regular fa-floppy-disk mr-1"></i>
 

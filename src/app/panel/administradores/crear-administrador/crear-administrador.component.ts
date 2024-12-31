@@ -59,29 +59,36 @@ export class CrearAdministradorComponent implements OnInit {
   }
 
   // f************************************** FUNCION PARA CREAR BARRIO ***************************
-  onSave() {
-    const { email, clave, nombreCompleto } = this.frmAddEditAdmin.value;
-
+  registrar() {
     if (this.frmAddEditAdmin.valid) {
       this.loading = true;
-      this.usuarioService.addData(nombreCompleto, email, clave).subscribe({
-        next: (res: any) => {
-          console.log('respuesta cargar admin', res);
-          this.toastr.success('¡Administrador cargado con éxito!');
-          this.frmAddEditAdmin.reset();
+      const email = this.frmAddEditAdmin.get('email')?.value;
+      const clave = this.frmAddEditAdmin.get('clave')?.value;
+      const nombreCompleto = this.frmAddEditAdmin.get('nombreCompleto')?.value;
+
+      this.usuarioService
+        .registrar(nombreCompleto, email, clave)
+        .subscribe((response: any) => {
+          if (response && response.isExitoso) {
+            // console.log('Resultado de login:', response);
+
+            // Accede al email correctamente desde response.resultado.email
+            if (response.resultado && response.resultado.email) {
+              localStorage.setItem('email', response.resultado.email);
+              // console.log('Email almacenado:', localStorage.getItem('email'));
+            } else {
+              // console.error('Email no encontrado en el resultado');
+            }
+
+            this.toastr.success('¡Usuario creado con éxito!');
+            // this.router.navigate(['/admin/login']);
+          } else {
+            this.toastr.error(
+              'Credenciales incorrectas. Por favor, revise los datos ingresados e intente nuevamente.'
+            );
+          }
           this.loading = false;
-          setTimeout(() => {
-            location.reload();
-          }, 200);
-        },
-        error: (error: any) => {
-          this.toastr.error(
-            'Ha ocurrido un error. Espere e intente nuevamente.'
-          );
-          console.log('error', error);
-          this.loading = false;
-        },
-      });
+        });
     } else {
       Object.values(this.frmAddEditAdmin.controls).forEach((control) => {
         control.markAsTouched();

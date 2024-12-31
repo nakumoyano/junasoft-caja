@@ -74,6 +74,18 @@
     </div>
   </div> -->
 
+  <!-- S****************************** MENSAJE DE CAJA ************************ -->
+
+  <div
+    class="flex flex-col rounded-lg bg-yellow-100/80 my-4 drop-shadow gap-4 p-4 border-l-4 border-yellow-600"
+    *ngIf="estadoCaja"
+  >
+    <p class="font-bold text-yellow-600">
+      <i class="fa-solid fa-triangle-exclamation mr-2"></i>ATENCIÓN
+    </p>
+    <p><strong>Estado de la caja:</strong> {{ estadoCaja }}</p>
+    <p><strong>Saldo de la caja:</strong> {{ saldoCaja | currency }}</p>
+  </div>
   <!-- S****************************** MENSAJE DE WARNING ************************ -->
 
   <!-- <div

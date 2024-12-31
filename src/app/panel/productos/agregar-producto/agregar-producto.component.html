@@ -196,6 +196,60 @@
                 Seleccione una opción.
               </small>
             </div>
+            <!-- UNIDAD MEDIDA -->
+            <div class="flex flex-col">
+              <label
+                for="idUnidadMedida"
+                class="block mb-2 text-sm font-medium text-gray-900 uppercase"
+                >unidad medida</label
+              >
+              <p-dropdown
+                optionLabel="abreviatura"
+                id="idUnidadMedida"
+                filterBy="abreviatura"
+                [options]="unidadMedidas"
+                [(ngModel)]="selectedUnidadMedida"
+                [filter]="true"
+                optionValue="idUnidadMedida"
+                [showClear]="true"
+                placeholder="Seleccionar unidad de medida"
+                formControlName="idUnidadMedida"
+                appendTo="body"
+                [style]="{
+                  width: '100%',
+                  'background-color': '#F9FAFB',
+                  height: '42px',
+                  display: 'flex',
+                  'align-items': 'center',
+                  'border-radius': '8px',
+                  border:
+                    '1px solid rgb(209 213 219 / var(--tw-border-opacity))'
+                }"
+                [class.invalido]="
+                  controlUnidadMedida.touched && controlUnidadMedida.invalid
+                "
+                [ngClass]="
+                  controlUnidadMedida.touched && controlUnidadMedida.invalid
+                    ? 'border border-red-500 rounded-lg'
+                    : 'rounded-lg focus:outline-none text-black placeholder:text-sm'
+                "
+              >
+                <ng-template let-l pTemplate="item">
+                  <div class="l-item">
+                    <div>{{ l.abreviatura }}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+              <small
+                class="alert-panel alert-danger"
+                role="alert"
+                *ngIf="
+                  controlUnidadMedida.touched && controlUnidadMedida.invalid
+                "
+              >
+                Seleccione una opción.
+              </small>
+            </div>
           </div>
 
           <!-- BOTON GUARDAR -->
@@ -204,7 +258,6 @@
             class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center lg:w-auto md:w-auto sm:w-full"
             (click)="onSave()"
             *ngIf="!isEdit && !loading"
-            (click)="onSave()"
           >
             <i class="fa-regular fa-floppy-disk mr-1"></i>
 
@@ -250,7 +303,7 @@
 
               Guardar cambios
             </button>
-            <!-- <app-boton-cancelar *ngIf="isEdit"></app-boton-cancelar> -->
+            <app-boton-cancelar *ngIf="isEdit"></app-boton-cancelar>
           </div>
         </fieldset>
       </form>

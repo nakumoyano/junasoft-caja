@@ -43,18 +43,16 @@ export class UsuariosService {
     return this.http.post<any>(url, {});
   }
 
-  addData(
+  registrar(
     nombreCompleto: string,
     email: string,
     clave: string
   ): Observable<any> {
-    const formData: FormData = new FormData();
-
-    formData.append('nombreCompleto', nombreCompleto);
-    formData.append('email', email);
-    formData.append('clave', clave);
-
-    return this.http.post<any>(this.API_URL_REGISTRAR_ADMIN, formData);
+    return this.http.post(this.API_URL_REGISTRAR_ADMIN, {
+      nombreCompleto,
+      email,
+      clave,
+    });
   }
 
   // EDITAR DATOS ADMIN

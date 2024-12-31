@@ -21,7 +21,7 @@ import Swal from 'sweetalert2';
 export class EditarAperturaCajaComponent implements OnInit {
   @Input() tipoMovimientos: TipoMovimiento[];
 
-  selectedTipoOperacion: string;
+  selectedTipoMovimiento: string;
 
   frmAddEditMovCaja: FormGroup;
 
@@ -50,68 +50,70 @@ export class EditarAperturaCajaComponent implements OnInit {
     this.frmAddEditMovCaja = this.formBuilder.group({
       idMovimiento: [''],
       monto: ['', Validators.required],
-      motivo: [''],
-      idTipoOperacion: ['', Validators.required],
-      fechaMovimiento: [''],
+      descripcion: [''],
+      idTipoMovimiento: ['', Validators.required],
+      fechaHora: [''],
     });
   }
   // FUNCNION PARA EDITAR FORMULARIO
-  // editarMovimientoCaja() {
-  //   if (this.frmAddEditMovCaja.valid) {
-  //     this.loading = true;
+  editarMovimientoCaja() {
+    if (this.frmAddEditMovCaja.valid) {
+      this.loading = true;
 
-  //     const body = {
-  //       idMovimiento: this.frmAddEditMovCaja.value.idMovimiento,
-  //       idTipoOperacion: this.frmAddEditMovCaja.value.idTipoOperacion,
-  //       motivo: this.frmAddEditMovCaja.value.motivo,
-  //       monto: this.frmAddEditMovCaja.value.monto,
-  //       fechaMovimiento: this.frmAddEditMovCaja.value.fechaMovimiento,
-  //     };
+      const body = {
+        idMovimiento: this.frmAddEditMovCaja.value.idMovimiento,
+        idTipoMovimiento: this.frmAddEditMovCaja.value.idTipoMovimiento,
+        descripcion: this.frmAddEditMovCaja.value.descripcion,
+        monto: this.frmAddEditMovCaja.value.monto,
+        fechaHora: this.frmAddEditMovCaja.value.fechaHora,
+        idUsuario: 1,
+        idVenta: '',
+      };
 
-  //     Swal.fire({
-  //       title: '¿Estás seguro que deseas editar este movimiento de caja?',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#16A34A',
-  //       cancelButtonColor: '#4B5563',
-  //       confirmButtonText: 'Si, editar',
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         this.subscription.add(
-  //           this.cajaService.updateDataCaja(body).subscribe({
-  //             next: (response: any) => {
-  //               Swal.fire(
-  //                 '¡Editado!',
-  //                 'El movimiento se ha editado correctamente.',
-  //                 'success'
-  //               );
-  //               this.loading = false;
+      Swal.fire({
+        title: '¿Estás seguro que deseas editar este movimiento de caja?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#16A34A',
+        cancelButtonColor: '#4B5563',
+        confirmButtonText: 'Si, editar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.subscription.add(
+            this.cajaService.updateDataCaja(body).subscribe({
+              next: (response: any) => {
+                Swal.fire(
+                  '¡Editado!',
+                  'El movimiento se ha editado correctamente.',
+                  'success'
+                );
+                this.loading = false;
 
-  //               setTimeout(() => {
-  //                 this.router.navigate(['/admin/caja']).then(() => {
-  //                   setTimeout(() => {
-  //                     location.reload();
-  //                   }, 10);
-  //                 });
-  //               }, 1000);
-  //             },
-  //             error: (error: any) => {
-  //               Swal.fire(
-  //                 'Error!',
-  //                 'Ha ocurrido un error al intentar editar el movimiento de caja. Por favor, inténtelo de nuevo más tarde.',
-  //                 'error'
-  //               );
-  //             },
-  //           })
-  //         );
-  //       }
-  //     });
-  //   } else {
-  //     this.toastr.error(
-  //       'Ocurrio un error, revise los campos e intente nuevamente'
-  //     );
-  //   }
-  // }
+                setTimeout(() => {
+                  this.router.navigate(['/admin/caja']).then(() => {
+                    setTimeout(() => {
+                      location.reload();
+                    }, 10);
+                  });
+                }, 1000);
+              },
+              error: (error: any) => {
+                Swal.fire(
+                  'Error!',
+                  'Ha ocurrido un error al intentar editar el movimiento de caja. Por favor, inténtelo de nuevo más tarde.',
+                  'error'
+                );
+              },
+            })
+          );
+        }
+      });
+    } else {
+      this.toastr.error(
+        'Ocurrio un error, revise los campos e intente nuevamente'
+      );
+    }
+  }
 
   // FUNCINO PARA CARGAR LOS DATOS EN EL FORMULARIO CUANDO SE QUIERE EDITAR
   cargarDatosEnFormulario() {
@@ -124,17 +126,17 @@ export class EditarAperturaCajaComponent implements OnInit {
           (data: any) => {
             console.log(data);
 
-            const fecha = new Date(data.resultado.fechaMovimiento);
+            const fecha = new Date(data.resultado.fechaHora);
             const fechaFormateada = fecha.toISOString().split('T')[0];
 
             const formData = {
               ...data.resultado,
-              fechaMovimiento: fechaFormateada,
+              fechaHora: fechaFormateada,
             };
 
             this.frmAddEditMovCaja.patchValue(formData);
             this.mostrarSkeleton = false;
-            this.selectedTipoOperacion = data.resultado.idTipoOperacion;
+            this.selectedTipoMovimiento = data.resultado.idTipoMovimiento;
           },
           (error) => {
             console.error(error);
@@ -151,7 +153,7 @@ export class EditarAperturaCajaComponent implements OnInit {
         const tipoMovimientos = data.resultado;
 
         this.tipoMovimientos = tipoMovimientos;
-        // // Filtrar el tipo de operación con idTipoOperacion diferente de 4
+        // // Filtrar el tipo de operación con idTipoMovimiento diferente de 4
         // this.tipoMovimientos = tipoMovimientos.filter(
         //   (tipoMovimiento: any) => tipoMovimiento.idTipoMovimiento !== 4
         // );
@@ -166,16 +168,16 @@ export class EditarAperturaCajaComponent implements OnInit {
   get controlMonto(): FormControl {
     return this.frmAddEditMovCaja.controls['monto'] as FormControl;
   }
-  get controlMotivo(): FormControl {
-    return this.frmAddEditMovCaja.controls['motivo'] as FormControl;
+  get controlDescripcion(): FormControl {
+    return this.frmAddEditMovCaja.controls['descripcion'] as FormControl;
   }
   get controlGaleno(): FormControl {
     return this.frmAddEditMovCaja.controls['galenos'] as FormControl;
   }
   get controlYipoOperacion(): FormControl {
-    return this.frmAddEditMovCaja.controls['idTipoOperacion'] as FormControl;
+    return this.frmAddEditMovCaja.controls['idTipoMovimiento'] as FormControl;
   }
   get controlFecha(): FormControl {
-    return this.frmAddEditMovCaja.controls['fechaMovimiento'] as FormControl;
+    return this.frmAddEditMovCaja.controls['fechaHora'] as FormControl;
   }
 }

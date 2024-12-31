@@ -23,12 +23,29 @@ export class CajaService {
   private API_URL_BY_DIA_SELECCIONADO =
     'https://apicaja.junasoft.com/MovimientosCaja/MovimientosDelDiaSeleccionado';
 
+  private API_URL_ESTADO_CAJA =
+    'https://apicaja.junasoft.com/MovimientosCaja/EstadoCaja';
+
+  private API_URL_FACTURADO_DIA =
+    'https://apicaja.junasoft.com/MovimientosCaja/FacturacionDelDia';
+
   constructor(private http: HttpClient) {}
 
   // MOSTRAR DATOS
   getAll(): Observable<Caja[]> {
     return this.http.get<Caja[]>(this.API_URL);
   }
+
+  // MOSTRAR DATOS FACTUDADO DEL DIA
+  getFacturadoDelDia(): Observable<Caja[]> {
+    return this.http.get<Caja[]>(this.API_URL_FACTURADO_DIA);
+  }
+
+  //ESTADO CAJA
+  getEstadoCaja(): Observable<any[]> {
+    return this.http.get<any[]>(this.API_URL_ESTADO_CAJA);
+  }
+
   // MOSTRAR DATOS DEL DIA
   getAllDataDelDia(): Observable<Caja[]> {
     return this.http.get<Caja[]>(this.API_URL_BY_DIA_ACTUAL);
@@ -81,7 +98,7 @@ export class CajaService {
 
   // ELIMINAR CAJA (listo)
   deleteData(caja: Caja): Observable<Caja[]> {
-    return this.http.delete<Caja[]>(this.API_URL + '/' + caja.idCaja);
+    return this.http.delete<Caja[]>(this.API_URL + '/' + caja.idMovimiento);
   }
 
   // MOVIMIENTO DIA SELECCIONADO (listo)
@@ -97,6 +114,6 @@ export class CajaService {
 
   // EDITAR DATOS (listo)
   updateDataCaja(caja: Caja): Observable<Caja> {
-    return this.http.put<Caja>(this.API_URL + '/' + caja.idCaja, caja);
+    return this.http.put<Caja>(this.API_URL + '/' + caja.idMovimiento, caja);
   }
 }

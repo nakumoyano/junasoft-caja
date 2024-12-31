@@ -29,6 +29,9 @@ import { ListadoDeProductosComponent } from './panel/productos/listado-de-produc
 import { CrearAdministradorComponent } from './panel/administradores/crear-administrador/crear-administrador.component';
 import { CajaComponent } from './panel/caja/caja/caja.component';
 import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/editar-apertura-caja.component';
+import { LoginComponent } from './auth/login/login.component';
+import { CargarVentaComponent } from './panel/ventas/cargar-venta/cargar-venta.component';
+import { ListadoDeVentasComponent } from './panel/ventas/listado-de-ventas/listado-de-ventas.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { EditarAperturaCajaComponent } from './panel/caja/editar-apertura-caja/e
     CrearAdministradorComponent,
     CajaComponent,
     EditarAperturaCajaComponent,
+    LoginComponent,
+    CargarVentaComponent,
+    ListadoDeVentasComponent,
   ],
   imports: [
     BrowserModule,
