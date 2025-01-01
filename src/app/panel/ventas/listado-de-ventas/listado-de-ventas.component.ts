@@ -42,14 +42,12 @@ export class ListadoDeVentasComponent implements OnInit {
   }
 
   // d***************************************** FUNCION PARA ELIMINAR ***********************************
-  eliminar(venta: any) {
-    this.ventasService.deleteData(venta).subscribe({
+  eliminar(marca: any) {
+    this.ventasService.deleteData(marca).subscribe({
       next: (response: any) => {
         if (response.statusCode === 204) {
           this.toastr.success('¡La venta se ha eliminado correctamente!');
-          setTimeout(() => {
-            location.reload();
-          }, 200);
+          this.getAllDatos();
         } else {
         }
       },
