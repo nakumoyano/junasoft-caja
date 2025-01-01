@@ -263,10 +263,18 @@ export class CajaComponent implements OnInit {
           // location.reload();
         },
         error: (error: any) => {
-          this.toastr.error(
-            'Ha ocurrido un error. Espere e intente nuevamente.',
-            error
-          );
+          // Accede a error.error.errorMessages si existe
+          const errorMessages = error?.error?.errorMessages;
+          const errorMessage =
+            Array.isArray(errorMessages) && errorMessages.length > 0
+              ? errorMessages[0] // Toma el primer mensaje del array
+              : 'Ha ocurrido un error inesperado.'; // Mensaje genérico si no hay mensajes
+
+          // Muestra el mensaje específico con Toastr
+          this.toastr.error(errorMessage, 'Error');
+
+          // Opcional: Muestra detalles del error en la consola para depuración
+          console.error('Error al intentar abrir caja:', error);
         },
       });
     } else {
@@ -290,10 +298,18 @@ export class CajaComponent implements OnInit {
           // location.reload();
         },
         error: (error: any) => {
-          this.toastr.error(
-            'Ha ocurrido un error. Espere e intente nuevamente.',
-            error
-          );
+          // Accede a error.error.errorMessages si existe
+          const errorMessages = error?.error?.errorMessages;
+          const errorMessage =
+            Array.isArray(errorMessages) && errorMessages.length > 0
+              ? errorMessages[0] // Toma el primer mensaje del array
+              : 'Ha ocurrido un error inesperado.'; // Mensaje genérico si no hay mensajes
+
+          // Muestra el mensaje específico con Toastr
+          this.toastr.error(errorMessage, 'Error');
+
+          // Opcional: Muestra detalles del error en la consola para depuración
+          console.error('Error al intentar retirar caja:', error);
         },
       });
     } else {
